@@ -1,0 +1,57 @@
+<!-- #set(List<SysRoleDO> rolelist) -->
+<!-- #set(SysRoleDO role) -->
+<!--#set(UserAccount account)-->
+<!--#set(Menu menu)-->
+<!--#set(List menus)-->
+<!--#set(SysUserForm form)-->
+<!--#set(BindingResult bindingResult)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">$!{permName('permission.group.add')}</h3>
+			</div>
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form id="userForm" class="dialog-content" action="/sys/addSysRole.do" method="post">
+					<div class="form-group">
+						<label>用户组名:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input type="text" id="roleName" name="roleName" class="form-control"
+								   placeholder="用户组名"  />
+						</div>
+						<!-- /.input group -->
+					</div>
+					
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">添加用户组</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+(function ($) {
+    'use strict';
+//    $('input').iCheck({
+//        checkboxClass: 'icheckbox_square-blue',
+//        radioClass: 'iradio_square-blue',
+//        increaseArea: '20%' // optional
+//    });
+	$('.selectpicker').selectpicker();
+})(jQuery);
+</script>
+</body>
+</html>

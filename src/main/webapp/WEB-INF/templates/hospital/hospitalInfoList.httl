@@ -1,0 +1,241 @@
+`<!--#set(HospitalInfo info) -->
+<!--#set(PageResult page)-->
+<!--#set(HospitalQueryForm form)-->
+<!--#set(List<ProvincesDO> province)-->
+<!--#set(ProvincesDO provinceDO)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('hosManage.hosptialInfoList')} <small>医院列表</small>
+			</h1>
+		</section>
+		<!-- Main content -->
+		<section class="content hospitalList">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+						<div class="btn-group">
+							<div class="col-lg-1 col-md-1 col-xs-1"  style="padding: 0;">
+							<button id="addhospital" class="btn btn-default btn-sm" >
+								添加
+							</button>
+								</div>
+							<div class="col-lg-11 col-md-11 col-sm-11">
+								<form id="searchForm" method="get">
+									<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+										<div class="input-group input-group-sm">
+											<div class="input-group-btn ">
+												<span  class="btn btn-default">医院名称</span>
+											</div>
+											<input type="text" class="form-control" name="name" value="${form.name}">
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+										<div class="input-group input-group-sm">
+											<div class="input-group-btn ">
+												<span  class="btn btn-default">省</span>
+											</div>
+
+											<select  id="provinceId"  name="province" class="form-control">
+												<option value="0">请选择</option>
+												<!--#for(provinceDO : province)-->
+												<option value="${provinceDO.provinceid}">${provinceDO.province}</option>
+												<!--#end-->
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+										<div class="input-group input-group-sm">
+											<div class="input-group-btn ">
+												<span  class="btn btn-default">市</span>
+											</div>
+											<select  id="cityId"  name="city" class="form-control">
+											</select>
+
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+										<div class="input-group input-group-sm">
+											<div class="input-group-btn ">
+												<span  class="btn btn-default">区/县</span>
+											</div>
+											<select  id="countyId" name="county" class="form-control">
+											</select>
+										</div>
+									</div>
+									<div  class="col-lg-3 col-sm-6 col-xs-6">
+										<input type="hidden" name="page" value="1">
+										<input type="hidden" name="pageSize" value="${page.pageSize}">
+										<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+										<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+									</div>
+								</form>
+							</div>
+						</div>
+
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll" class="th_checkbox_btn"  /><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty"  style="padding-left: 20px">编号</th>
+									<th class="table_th_sty">医院名称</th>
+									<th class="table_th_sty">省市区县</th>
+									<th class="table_th_sty">详细地址</th>
+									<th class="table_th_sty">科室</th>
+									<th class="table_th_sty">开通时间</th>
+									<!--<th class="table_th_sty">联系人</th>
+									<th class="table_th_sty">联系电话</th>-->
+									<th class="table_th_sty">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(info : page.value)  -->
+								<!--#set(int num=(page.page-1)*page.pageSize)-->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${info.id}" /></td>-->
+									<td  style="padding-left: 20px">${num+for.index+1}</td>
+									<td>${info.name}</td>
+									<td>${info.province}-${info.city}-${info.county}</td>
+									<td>${info.address}</td>
+									<td>${info.department}</td>
+									<td>${info.createTime.format("yyyy-MM-dd")}</td>
+									<!--<td>${info.linkMan}</td>
+									<td>${info.mobile}</td>-->
+									<td>
+										<button id="${info.id}" class="btn btn-primary btn-sm updateHospitalStatus">业务管理</button>
+										<button id="${info.id}" class="btn btn-primary btn-sm updatehospital">修改</button>
+										<button id="${info.id}" class="btn btn-primary btn-sm updateDepart">科室管理</button>
+									</td>
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer clearfix">
+
+					$!{page(page,"index.loadContent('/sysManage/hospitalInfoList.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="build/js/index.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			var page = $(".hospitalList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#refresh").click(function(){
+				index.loadContent("sysManage/hospitalInfoList.do");
+			});
+			page.find("#addhospital").click(function(){
+				index.loadDialog({url:"sysManage/addhospital.do",target:"sysManage/hospitalInfoList.do",title:"添加医院信息"});
+			});
+			page.find(".updatehospital").click(function(e){
+				var id= $(e.target).attr('id');
+				index.loadDialog({url:"sysManage/"+id+"/updatehospital.do",target:"sysManage/hospitalInfoList.do",title:"更新医院信息"});
+			});
+			page.find(".updateHospitalStatus").click(function(e){
+				var id= $(e.target).attr('id');
+				index.loadDialog({url:"sysManage/"+id+"/updateHospitalStatus.do",target:"sysManage/hospitalInfoList.do",title:"更新医院的业务状态"});
+			});
+			page.find(".updateDepart").click(function(e){
+				var id= $(e.target).attr('id');
+				index.loadContent("sysManage/"+id+"/getHospitalDepartment.do");
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("sysManage/hospitalInfoList.do?"+form.serialize());
+				return false;
+			});
+			page.find("#provinceId").change(function () {
+				$.get("sysManage/"+$("#provinceId").val()+"/getCityByProvinceId.do",function(data){
+					var result = "<option value='0'>选择城市</option>";
+					if(data.status==0){
+
+						$.each(data.data,function(n,value){
+							result +="<option value='"+value.cityid+"'>"+value.city+"</option>";
+						});
+						$("#cityId").html('');
+						$("#cityId").append(result);
+					}
+				},"json");
+			});
+
+			page.find("#cityId").change(function () {
+				$.get("sysManage/"+$("#cityId").val()+"/getAreaByCityId.do",function(data){
+					var result = "<option value='0'>选择区域</option>";
+					if(data.status==0){
+						$.each(data.data,function(n,value){
+							result +="<option value='"+value.areaid+"'>"+value.area+"</option>";
+						});
+						$("#countyId").html('');
+						$("#countyId").append(result);
+					}
+				},"json");
+			});
+			var provinceId='${form.province}'==''?'0':'${form.province}';
+			var cityId='${form.city}'==''?'0':'${form.city}';
+			var countyId='${form.county}'==''?'0':'${form.county}';
+			if(provinceId !='0'){
+				page.find("#provinceId").val(provinceId);
+				$.get("sysManage/"+provinceId+"/getCityByProvinceId.do",function(data){
+					var result = "<option value='0'>选择城市</option>";
+					if(data.status==0){
+
+						$.each(data.data,function(n,value){
+							result +="<option value='"+value.cityid+"'>"+value.city+"</option>";
+						});
+						page.find("#cityId").html('');
+						page.find("#cityId").append(result);
+						page.find("#cityId").val(cityId);
+					}
+				},"json");
+
+				$.get("sysManage/"+cityId+"/getAreaByCityId.do",function(data){
+					var result = "<option value='0'>选择区域</option>";
+					if(data.status==0){
+						$.each(data.data,function(n,value){
+							result +="<option value='"+value.areaid+"'>"+value.area+"</option>";
+						});
+						page.find("#countyId").html('');
+						page.find("#countyId").append(result);
+						page.find("#countyId").val(countyId)
+					}
+				},"json");
+
+			}
+
+		})(jQuery);
+	</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "hospital",
+  "version": "1.0.0",
+  "devDependencies": {
+    "R2": "latest",
+    "coffee-script": "^1.9.3",
+    "dateformat": "^1.0.11",
+    "eventemitter2": "^0.4.14",
+    "findup-sync": "^0.2.1",
+    "glob": "^5.0.14",
+    "grunt": "^0.4.5",
+    "grunt-autoprefixer": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-csslint": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-htmlmin": "latest",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-csscomb": "latest",
+    "grunt-cssjanus": "latest",
+    "grunt-includes": "latest",
+    "grunt-legacy-log": "latest",
+    "grunt-legacy-util": "latest",
+    "iconv-lite": "^0.4.11",
+    "js-yaml": "^3.3.1",
+    "matchdep": "latest",
+    "minimatch": "^2.0.10",
+    "nopt": "^3.0.3",
+    "rimraf": "^2.4.2"
+  }
+}

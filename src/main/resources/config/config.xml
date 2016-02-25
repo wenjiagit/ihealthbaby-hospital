@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>配置</comment>
+    <!--<entry key="jdbc.url"><![CDATA[jdbc:mysql://127.0.0.1:3306/taka?traceProtocol=true&autoReconnect=true&rewriteBatchedStatements=true&characterEncoding=utf-8]]></entry>-->
+    <entry key="jdbc.url"><![CDATA[jdbc:mysql://127.0.0.1:3306/ihealthbaby_hospital?autoReconnect=true&characterEncoding=utf-8]]></entry>
+    <!-- 数据库的用户名 -->
+    <entry key="jdbc.username">root</entry>
+    <!-- 数据库的密码 -->
+    <entry key="jdbc.password">111111</entry>
+    <entry key="jdbc.maxNums">20</entry>
+    <!-- 每个分区最小的连接数 -->
+    <entry key="jdbc.minNums">5</entry>
+    <!-- 分区数 ，默认值2，最小1，推荐3-4，视应用而定 -->
+    <entry key="jdbc.partitionNums">5</entry>
+    <entry key="jdbc.init">true</entry>
+
+    <entry key="port.jdbc.url"><![CDATA[jdbc:mysql://127.0.0.1:3306/ihealthbaby?autoReconnect=true&characterEncoding=utf-8]]></entry>
+    <!-- 数据库的用户名 -->
+    <entry key="port.jdbc.username">root</entry>
+    <!-- 数据库的密码 -->
+    <entry key="port.jdbc.password">111111</entry>
+    <entry key="port.jdbc.maxNums">20</entry>
+    <!-- 每个分区最小的连接数 -->
+    <entry key="port.jdbc.minNums">5</entry>
+    <!-- 分区数 ，默认值2，最小1，推荐3-4，视应用而定 -->
+    <entry key="port.jdbc.partitionNums">5</entry>
+
+	<entry key="port.serverUrl">http://localhost:8080/port/admin/</entry>
+
+    <entry key="qiniu.access.key">lDyB1NKlj-XzHit8xHh6nmzuSW031oD0RmziuSju</entry>
+    <entry key="qiniu.sceret.key">qwpfcpndBjeAquHS7o8wmPW-epg-LsgeGUbmQA5o</entry>
+    <entry key="qiniu.space.name">test</entry>
+    <entry key="qiniu.base.path">http://7xkvq0.com2.z0.glb.qiniucdn.com/</entry>
+</properties>

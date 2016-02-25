@@ -1,0 +1,136 @@
+<!--#set(HospitalFetalHeartInfo info)-->
+<!--#set(List<HospitalDO> hospitals)-->
+<!--#set(HospitalDO hospital)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form  class="dialog-content" action="fetalheart/${info.id}/updateAdminDev.do" method="post">
+					<div class="form-group">
+						<label>医院名称:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-hospital-o"></i>
+							</div>
+							<select id="hospitalId" name="hospitalId" class="form-control" >
+								<option value="0">不分配医院</option>
+								<!--#for(hospital : hospitals)-->
+								<option value="${hospital.id}" #if(info.hospitalDO.id==hospital.id) selected #end>${hospital.name}</option>
+								<!--#end-->
+							</select>
+							</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>使用类型:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-hospital-o"></i>
+							</div>
+							<select id="useType" name="useType" class="form-control" >
+								<option value="0" #if(info.useType==0) selected #end>院内</option>
+								<option value="1" #if(info.useType==1) selected #end>出租</option>
+							</select>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group" id="depDiv">
+						<label>科室:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-hospital-o"></i>
+							</div>
+							<select type="text" id="departmentId" name="departmentId" class="form-control">
+							</select>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>探头SN:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-building"></i>
+							</div>
+           					<input  class="form-control" id="serialnum" name="serialnum" type="text" placeholder="探头SN" value="${info.serialnum}" readonly/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<!-- phone mask -->
+					<div class="form-group" id="DIVdevice">
+						<label>宿主Id:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-phone"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="deviceId" name="deviceId" placeholder="绑定的手机宿主Id" value="${info.deviceId}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">更新信息</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+(function ($) {
+    'use strict';
+	var departmentSelect= function(){
+	var hid=$("#hospitalId").val();
+	$.get("fetalheart/belongDepartment.do?hospitalId="+hid,function(data){
+		if(data.status==0){
+			var list=data.data;
+			if(list!=null&&list.length>0){
+				var result="";
+				$.each(list,function(n,value){
+					if(${info.departmentDO.id} == value.id){
+					result +="<option value='"+value.id+"' selected>"+value.department+"</option>";
+					}else{
+						result +="<option value='"+value.id+"'>"+value.department+"</option>";
+					}
+				});
+				$("#departmentId").empty().append(result);
+			}else{
+				var result="<option value='0'>尚未添加科室</option>";
+				$("#departmentId").empty().append(result);
+			}
+		}
+	},"json");
+	}
+	$("#hospitalId").change(function(){
+		departmentSelect();
+	});
+	$("#serialnum").keyup(function(){
+		var serialnum = $('#serialnum').val();
+		$('#serialnum').val(serialnum.toUpperCase());
+	});
+	departmentSelect();
+	$("#useType").change(function(){
+		usetypeSelect();
+	});
+	var usetypeSelect = function(){
+		if($("#useType").val()==0){
+			$("#DIVdevice").show();
+			$("#depDiv").show();
+		}else{
+			$("#DIVdevice").hide();
+			$("#depDiv").hide();
+		}
+	}
+	usetypeSelect();
+})(jQuery);
+</script>
+</body>
+</html>

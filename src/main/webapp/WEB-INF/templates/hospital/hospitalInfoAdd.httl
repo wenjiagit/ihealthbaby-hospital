@@ -1,0 +1,177 @@
+<!--#set(List<ProvincesDO> province)-->
+<!--#set(ProvincesDO provinceDO)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">$!{permName('hosManage.hosptialInfoList.add')}</h3>
+			</div>
+			<div class="box-body" >
+				<!-- Date dd/mm/yyyy -->
+				<form  class="dialog-content" action="sysManage/addhospital.do" method="post"  id="hospitalAddDiv">
+					<div class="form-group">
+						<label>医院名称:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar" style="font-size: 19px"></i>
+							</div>
+							<input type="text" id="name" name="name" class="form-control"
+								   placeholder="医院名称"  />
+							</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">医院管理员姓名:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-user" style="font-size: 18px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="truename"  name="truename" placeholder="管理员姓名" value=""/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">医院管理员账号:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-user" style="font-size: 20px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="username" name="username" placeholder="账号" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">医院管理员密码:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-calculator" style="font-size: 20px"></i>
+							</div>
+							<input type="password" class="form-control"
+								   id="password" name="password" placeholder="密码" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label>省市区县:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-sign-in"  style="font-size: 21px"></i>
+							</div>
+							<div class="input-group">
+								<select  id="province"  name="province" class="select_input" style="margin-left: 0px">
+									<option value="0">请选择</option>
+									<!--#for(provinceDO : province)-->
+									<option value="${provinceDO.provinceid}">${provinceDO.province}</option>
+									<!--#end-->
+								</select>
+								<select  id="city"  name="city" class="select_input">
+								</select>
+								<select  id="county"  name="county" class="select_input">
+								</select>
+							</div>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<!-- phone mask -->
+					<div class="form-group">
+						<label>详细地址:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-paper-plane-o" style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="address" name="address" placeholder="详细地址" />
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group" id="deplist">
+						<label>科室:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+							<input type="text"class="form-control" style="margin-bottom: 17px" id="department" name="department" placeholder="科室" />
+						    <!--<span class="fa fa-close" style="float: right;margin-top: -42px;margin-right:15px;color: #ababab;font-size: 16px"></span>-->
+					</div>
+					<a href="javascript:" id="addRow" class="btn btn-primary">添加科室</a>
+					<div class="form-group" style="margin-top: 15px">
+						<label>联系人:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-pencil-square-o"  style="font-size: 21px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="linkMan" name="linkMan" placeholder="联系人" />
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>联系电话:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-fw fa-building"  style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="mobile"  name="mobile" placeholder="联系电话" />
+						</div>
+						<!-- /.input group -->
+					</div>
+
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">添加信息</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+	(function ($) {
+		'use strict';
+		var page=$("#hospitalAddDiv");
+		console.log(page);
+		page.find("#province").change(function () {
+					$.get("sysManage/"+$("#province").val()+"/getCityByProvinceId.do",function(data){
+						if(data.status==0){
+							var result = "<option value='000000'>选择城市</option>";
+							$.each(data.data,function(n,value){
+								result +="<option value='"+value.cityid+"'>"+value.city+"</option>";
+							});
+							$("#city").html('');
+							$("#city").append(result);
+						}
+					},"json");
+				});
+
+		page.find("#city").change(function () {
+					$.get("sysManage/"+$("#city").val()+"/getAreaByCityId.do",function(data){
+						if(data.status==0){
+							var result = "<option value='000000'>选择区域</option>";
+							$.each(data.data,function(n,value){
+								result +="<option value='"+value.areaid+"'>"+value.area+"</option>";
+							});
+							$("#county").html('');
+							$("#county").append(result);
+						}
+					},"json");
+				});
+		page.find("#addRow").click(function(){
+					var id = $("#deplist").find("input").length;
+					$("#deplist").append("<div class='input-group col-md-12 close_input' style='margin-top: 0px'>" +
+											"<input type='text' class='form-control' id='department"+id+"' name='department' placeholder='科室'/> " +
+											"<div class='fa fa-close close_btn' style='float: right;position:relative;top:-25px;margin-right:15px;color: #ababab;cursor:pointer;font-size: 16px;z-index: 10000'></div>"+
+											"</div>");
+				});
+		page.find(document).on('click','.close_btn',function(){
+					$(this).parent().remove();
+
+				})
+
+	})(jQuery);
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!--#set(List<HospitalDO> hospitals)-->
+<!-- #set(HospitalDO hospital) -->
+<!-- #set(DoctorForm form) -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+<link href="lib/silviomoreto-bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+
+</head>
+<body>
+<<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">修改医生信息</h3>
+			</div>
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form id="doctorForm" class="dialog-content" action="/staffManage/updateDoctor/${form.id}.do" method="post">
+					<div class="form-group">
+						<label>医院:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar" style="font-size: 18px"></i>
+							</div>
+							<select  class="form-control" id="hospitalId" name="hospitalId" >
+								<!-- #for(hospital : hospitals) -->
+								<option value="${hospital.id}" #if(form.hospitalId == hospital.id) selected #end>${hospital.name}</option>
+								<!-- #end -->
+							</select>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">姓名:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-user" style="font-size: 18px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="name" name="name" placeholder="姓名" value="${form.name}"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">账号:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-user" style="font-size: 20px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="username" name="username" placeholder="账号" value="${form.username}" readonly/>
+						</div>
+					</div>
+					<!-- /.input group -->
+					<div class="form-group">
+						<div style="float:left"><label>性别:</label></div>
+						<div style="float:left;margin-left: 15px" class="input-group">
+							<!--#if(form.gender == "男")-->
+							<input type="radio"   name="gender"  value="男" checked/>男
+							<input type="radio"   name="gender"  value="女"/>女
+							<!--#else-->
+							<input type="radio"   name="gender"  value="男"/>男
+							<input type="radio"   name="gender"  value="女" checked/>女
+							<!--#end-->
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div style="clear: both"></div>
+					<!-- phone mask -->
+					<div class="form-group">
+						<label>座机电话:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-tablet" style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="telephone" name="telephone" placeholder="座机电话" value="${form.telephone}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>手机号:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-building" style="font-size: 18px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="mobile" name="mobile" placeholder="手机号" value="${form.mobile}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>科室:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-list" style="font-size: 18px" ></i>
+							</div>
+							<select  class="form-control" id="departmentId" name="departmentId" >
+							</select>
+						</div>
+						<!-- /.input group -->
+					</div>
+					
+					<div class="form-group">
+						<label>职称:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-user-md" style="font-size: 20px"></i>
+							</div>
+							<select  class=" form-control" id ="title" name="title" >
+								<option value="主任医师">主任医师</option>
+								<option value="副主任医师">副主任医师</option>
+								<option value="医师">医师</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>邮箱:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-envelope-o" style="font-size: 20px"></i>
+							</div>
+							<input type="email" class="form-control"
+								   id="email" name="email" placeholder="邮箱" value="${form.email}"/>
+						</div>
+					</div>
+					<input type="hidden" name="type" value="1">
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">修改</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+<script src="lib/silviomoreto-bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="js/alone-form.min.js"></script>
+<script>
+		(function ($) {
+		    'use strict';
+			var departmentSelect = function(){
+				var id=$("#hospitalId").val();
+				var deparmentId = '${form.departmentId}'
+				$.get("staffManage/departmentList.do",{hosid:id},function(data){
+					if(data.status==0){
+						var list=data.data;
+						if(list!=null&&list.length>0){
+							var result="";
+							$.each(list,function(n,value){
+								if(deparmentId==value.id){
+									result +="<option value='"+value.id+"' selected>"+value.department+"</option>";
+								}else{
+
+									result +="<option value='"+value.id+"'>"+value.department+"</option>";
+								}
+							});
+							$("#departmentId").html('');
+							$("#departmentId").append(result);
+						}else{
+							$("#departmentId").html("<option value='0'>尚未添加科室</option>");
+						}
+					}
+				},"json");
+			}
+			$("#hospitalId").change(function () {
+				departmentSelect();
+			});
+			departmentSelect();
+		})(jQuery);
+</script>
+</body>
+</html>

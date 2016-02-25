@@ -1,0 +1,239 @@
+table tr td{
+  vertical-align: middle !important;
+}
+.th_checkbox_btn{
+  width: 18px;height: 18px;position: relative;top: 4px;
+}
+.td_checkbox_btn{
+  width: 18px;height: 18px;
+}
+.print-content{
+  overflow: hidden;
+  text-align: center;
+  margin: 10px auto;
+  box-sizing: content-box;
+  border: solid 1px #9d9d9d;
+  background: #fff;
+  box-shadow: 2px 2px 4px 1px #9d9d9d;
+}
+
+.print-content-body{
+  overflow: hidden;
+  text-align: center;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+#print-content-chart-body{
+  overflow: hidden;
+  text-align: center;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+//头部的样式
+.nav_header_border {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1020;
+}
+
+@media (max-width: 992px) {
+  .heade {
+    display: none;
+  }
+  #title_header{
+    display:block;margin-top: -97px;
+  }
+  #content_heade {
+    bottom: 0;
+    position: fixed !important;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+  }
+  .content-wrapper{
+    margin-top: 0;
+  }
+  .sidebar {
+    margin-top: -97px;
+  }
+  .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+    margin-top: -286px;
+    margin-right: -32px;
+  }
+  .control-sidebar {
+    margin-top: -46px;
+  }
+  .user-footer .pull-right{
+    background-color: #3c8dbc;
+    color: #fff;
+  }
+}
+@media (width: 768px) {
+  .content-wrapper {
+    margin-left: 230px;
+  }
+  #click_toggle{
+    margin-top: 0;
+  }
+  .main-footer{
+    display: none
+  }
+}
+
+@media (max-width: 768px) {
+  .heade {
+    display: none;
+  }
+  #content_heade {
+    bottom: 0;
+    position: fixed !important;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+  }
+  .content-wrapper {
+    margin: 0;
+  }
+  .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+    margin-top: -286px;
+    margin-right: -32px;
+  }
+  .user-footer .pull-right{
+    background-color: #3c8dbc;
+    color: #fff;
+  }
+}
+@media (min-width: 992px) {
+  .content-wrapper {
+    margin-top: 58px;
+  }
+}
+
+i {
+  color: #9e9e9e; 
+}
+
+.select_input {
+  height: 35px;
+  width: 150px;
+  margin-left: 15px;
+  border: 1px solid #ccc;
+}
+.collapsed {
+  background-image: url(img/collapsed.gif);
+  width: 16px;
+  height: 13px;
+}
+
+.expanded {
+  background-image: url(img/expanded.gif);
+  width: 16px;
+  height: 13px;
+}
+
+.form-group.has-error{
+  .input-group{
+    .input-group-addon{
+      border-color:#dd4b39;
+      i.fa{
+        color:#dd4b39;
+      }
+    }
+  }
+}
+
+//孕妇详情页样式
+.user_details{
+  margin: 10px 0;
+  font-size: 12px;
+  padding-left:70px;
+  color: #A8A8A8;
+}
+.user_details_val{
+  font-size: 20px;
+  color: #636363;
+}
+
+.chart,.consultation,.high_risk{
+  font-size: 18px;cursor: pointer;;background-color:#ECF0F5;height: 38px;text-align: center;
+  float: left;padding: 15px;color: #000;margin-left: 5px;line-height: 11px;width:120px;
+}
+.report{
+  font-size: 18px;cursor: pointer;background-color:#3498DB;
+  height: 38px;float: left;padding: 15px;color: #fff;line-height: 11px
+}
+
+//监护历史详情 样式
+.reply_detail{
+  padding-right: 8px;width:75%;margin-left: 0;border:#d2d6de;;float: left;height:auto;background-color: #d2d6de;border-radius: 5px;line-height: 31px;
+}
+
+//单选按钮样式
+.regular-radio {
+  display: none;
+}
+.regular-radio + label {
+  -webkit-appearance: none;
+  background-color: #fafafa;
+  border: 1px solid #cacece;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+  padding: 9px;
+  border-radius: 50px;
+  display: inline-block;
+  position: relative;
+  margin: 0 15px;
+  vertical-align: middle;
+}
+
+.regular-radio:checked + label:after {
+  content: ' ';
+  width: 12px;
+  height: 12px;
+  border-radius: 50px;
+  position: absolute;
+  top: 3px;
+  background: #99a1a7;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+  text-shadow: 0;
+  left: 3px;
+  font-size: 32px;
+}
+
+.regular-radio:checked + label {
+  background-color: #e9ecee;
+  color: #99a1a7;
+  border: 1px solid #adb8c0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1), inset 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.regular-radio + label:active, .regular-radio:checked + label:active {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0  1px 3px rgba(0,0,0,0.1);
+}
+
+.doctor_sty{
+  margin-top:-32px;background-color: #ECF0F5;margin-left: -15px
+}
+.doctor_whf{
+  float:left; width: 100px;height: 30px;border-radius: 5px;background-color: #FA7793;
+  color: #fff;margin-top:10px;text-align: center;line-height: 30px;margin-left: -15px
+}
+.doctor_yhf{
+  float: left;margin:16px 0 0 15px
+}
+//查询相关样式
+#search_div{
+  .search_input{
+    min-width:80px;
+  }
+  //.search_span{
+  //  padding:8px 10px;
+  //}
+  //.search_btn{
+  //  padding: 8px 20px;
+  //}
+  //.search_option{
+  //  height: 30px;font-size: 16px;
+  //}
+}

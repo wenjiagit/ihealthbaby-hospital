@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	" default-autowire="byName">
+	<bean id="catOptionCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.CatOptionCacheDao"/>
+	<bean id="loginTokenCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.LoginTokenCacheDao"/>
+	<bean id="nstOptionCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.NstOptionCacheDao"/>
+	<bean id="reportSettingsCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.ReportSettingsCacheDao"/>
+	<bean id="reportTempletCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.ReportTempletCacheDao"/>
+	<bean id="sysPermissionCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.SysPermissionCacheDao"/>
+	<bean id="sysRoleCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.SysRoleCacheDao"/>
+	<bean id="sysRolePermissionCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.SysRolePermissionCacheDao"/>
+	<bean id="sysUserRoleCacheDao" class="cn.ihealthbaby.hospital.db.dao.cache.SysUserRoleCacheDao"/>
+</beans>

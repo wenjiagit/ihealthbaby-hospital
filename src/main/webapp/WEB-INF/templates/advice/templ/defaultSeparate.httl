@@ -1,0 +1,339 @@
+<!--#set(AdviceAskForm advice)-->
+<!--#set(NstOptionDO nst)-->
+<!--#set(CatOptionDO cat)-->
+<!--#set(AdviceEcgDataDO adviceEcgData)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <style type="text/css">
+    </style>
+    <!--<link href="lib/bootstrap/css/bootstrap.min.css" media="print" rel="stylesheet" type="text/css" />-->
+    ${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner sysUserList ">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content adviceDetail" >
+        <div class="box box-primary clearfix">
+            <div class="box-header with-border text-center">
+                <h3 class="box-title">胎心率电子检测报告分隔</h3>
+            </div>
+            <div class="box-body no-padding print-content print-a4-vertical ">
+                <div class="print-content-body">
+                    <div class="clearfix">
+                        <div class="col-md-3 col-xs-6" style="font-size: 14px;font-weight: bold">
+                            监护单号：${advice.adviceDO.id}
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-3 col-xs-6" style="font-size:14px;font-weight: bold">
+                            监护日期：${advice.adviceDO.testTime}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            姓名： ${advice.userDO.name}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            年龄： ${advice.age}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            孕周： ${advice.adviceDO.gestationalWeeks}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            产检号：${advice.serviceDO.caseNumber}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            开始时间：${advice.adviceDO.testTime}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            监测时长：${advice.adviceDO.testTimeLong}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            咨询时间：${advice.askTime}
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            咨询单号：${advice.id}
+                        </div>
+                    </div>
+                    <!--<canvas height="500"  id="canvas" style="width:100%;"></canvas>-->
+                    <div class="text-center clearfix" id="heartRate-wrapper-inner"
+                         style="margin: 0; padding: 0;">
+                    </div>
+                    <div class="clearfix">
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">加速次数：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text" value="${adviceDO.speedupCount}" id="speedupCount" name="speedupCount">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px"></div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">加速幅度：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text" value="${adviceDO.speedupRange}">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">bpm</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">加速时间：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">秒</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">胎动计数：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">次</div>
+                        </div>
+
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">变异减速：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px"></div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">减速幅度：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">bpm</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">减速时间：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-xs-2" style="padding-left: 5px">秒</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">晚期减速：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">次</div>
+                        </div>
+
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5" style="font-weight: normal;padding:0">正<span
+                                    style="margin-left: 8px;">弦</span><span style="margin-left:7px;">波</span>：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input type="checkbox">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px"></div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5"
+                                   style="font-weight: normal;padding:0">胎心率基线：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">bpm</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                            <label class="control-label col-md-5 col-xs-5" style="font-weight: normal;padding:0">变<span
+                                    style="margin-left: 28px"></span>异：</label>
+
+                            <div class="col-md-5 col-xs-5" style="padding: 0;margin-top: -5px">
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="col-md-2 col-xs-2" style="padding-left: 5px">秒</div>
+                        </div>
+                        <div class="col-md-3 col-xs-6" style="margin-top: 15px;">
+                        </div>
+
+
+                        <div class="col-md-12 col-xs-12">
+                            <p style="font-size: 18px;margin-top: 20px">* 注：以上数据提供参考，请根据判读情况更改</p>
+
+                            <p style="margin-top: 10px;font-weight: bold"><span style="margin-right: 20px">用户手机号:</span>${advice.userDO.mobile}
+                            </p>
+
+                            <p style="font-weight: bold;">用<span style="margin-left: 3px">户</span><span
+                                    style="margin-left:3px">自</span><span style="margin-left:4px">诉</span>：<span
+                                    style="margin-left: 16px">${advice.question}</span></p>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <label class="control-label col-md-2 col-xs-2"
+                                   style="padding:0;width:12%;font-weight: bold">结果判读：
+                            </label>
+
+                            <div class="col-md-10 col-xs-10" style="margin-top: -5px;width: 88% padding-left: -5px;">
+                                <!--#for(nst : advice.nstList)-->
+                                <div style="margin-top:5px;">
+                    <span style="margin-right: 15px;">
+                    <input type="radio" name="radio1" value="${nst.nstOptionName}:${nst.nstOptionDetail}">${nst.nstOptionName}
+                    </span>
+                                </div>
+                                <!--#end-->
+                                <div style="margin-top:10px;">
+                                    <!--#for(cat : advice.catList)-->
+                                    <input type="radio" name="radio2"
+                                           value="${cat.catOptionName}:${cat.catOptionDetail}"><span
+                                        style="margin-right: 74px;">${cat.catOptionName}</span>
+                                    <!--#end-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea style="border-color: #ccc;margin-top: 15px;width: 100%"
+                                      id="Asktextarea"></textarea>
+
+                            <div style="text-align: right;margin-top: 15px;margin-right: 0">报告人：莫莫莫<span
+                                    style="margin-left: 30px">2015-08-13</span></div>
+                            <div class="col-md-7 col-xs-7" style="text-align: right;margin-top: 20px;">
+                                <div class="btn btn-primary">签发报告</div>
+                                <div class="btn btn-default" id="doPrint">打印报告</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /. box -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- ./wrapper -->
+${include('/commons/foot.httl')}
+<script>
+    // "v": 1,  "data":{
+    //    "heartRate"}:[158,123],   胎儿心率, 按照 interval 间隔
+    //    "fm":[1500,3500],         胎动 fetalMovement , 监测开始后的第xxx 毫秒
+    //    "afm":[1500,3500],        自动胎动 autoFetalMovement, 监测开始后的第xxx 毫秒
+    //    "doctor":[1500,3500],     医生干预 , 监测开始后的第xxx 毫秒
+    //    "interval": 500,          心率时间间隔,毫秒
+    //    "time":1400000000         开始时间,UTC 毫秒时间戳  },
+    //    "device": {               设备
+    //    "sn":"",                  设备id
+    //    "type":"",                设备型号
+    //    "version":""              设备版本号  },
+    //    "hostDevice":{            宿主设备（允许app的设备）
+    //    "deviceId":"",            设备id
+    //    "type":"",                类型
+    //    "os":"",                  os 版本信息字符串
+    //    "imei":"",                设备imei 可选
+    //    "softVersion":""          我们的软件版本字符串格式
+    // }}
+
+    (function ($) {
+        'use strict';
+        var data = $!{toJson(adviceEcgData)};
+
+        function show(wrap){
+            var yRuler = {
+                "40": {line: 2, color: "#000"},
+                "50": {line: 1, color: "#000", text: "50"},
+                "60": {line: 2, color: "#000", text: "60"},
+                "70": {line: 1, color: "#000"},
+                "80": {line: 2, color: "#000", text: "80"},
+                "90": {line: 1, color: "#000"},
+                "100": {line: 2, color: "#000", text: "100"},
+                "110": {line: 1, color: "#000"},
+                "120": {line: 2, color: "#000", text: "120"},
+                "130": {line: 1, color: "#000"},
+                "140": {line: 2, color: "#000", text: "140"},
+                "150": {line: 1, color: "#000"},
+                "160": {line: 2, color: "#000", text: "160"},
+                "170": {line: 1, color: "#000"},
+                "180": {line: 2, color: "#000", text: "180"},
+                "190": {line: 1, color: "#000"},
+                "200": {line: 2, color: "#000", text: "200"},
+                "210": {line: 1, color: "#000"},
+                "220": {line: 2, color: "#000", text: "220"}
+            };
+
+            var speed = 1*10;// 毫米/分钟 TODO动态获取到这个参数，走纸速度，系统单位是厘米，我们这里使用毫米，请注意
+            var heartRateDataStr = data.data;
+            var width = 170;
+            var padding = [10, 4, 10, 6];
+            var bodyWidth = width - (padding[1] + padding[3]);//注意pading，可以使用区域的宽度 毫米
+
+            var heartRateData = $.parseJSON(heartRateDataStr);
+            if (heartRateData.v != 1) {
+                $.alert("不支持的数据版本:" + heartRateData.v);
+                return;
+            }
+            var interval = heartRateData.data.interval;//毫秒
+            var minute = (60*1000)/interval;
+
+            var heartRate = heartRateData.data.heartRate;
+            var part = ( bodyWidth / speed) * minute;//拆分后的图数量
+            var partNums = Math.ceil(heartRate.length/part);//分开后数量
+
+//            console.log(bodyWidth / speed, speed, minute, part, partNums, heartRate.length);
+//            var partNums =
+
+            var xRulerN = 0;
+            for (var i = 0; i < partNums; i++) {
+                wrap.heartRateGrid({
+                    data: heartRate.slice(i * part, (i + 1) * part),
+                    wrong: null,
+                    width: width + "mm",
+                    dataShowCount:part,
+//                    paintRatioWidth:0.5,
+//                    paintRatioHeight:0.5,
+                    height: "80mm",
+                    padding: padding.slice(),//注意单位也是mm
+                    yRuler: yRuler,
+                    xRulerText:function(v,n){
+                        return (xRulerN++) + "'"
+                    }
+                });
+                xRulerN--;
+            }
+        }
+
+        show($("#heartRate-wrapper-inner"));
+
+        $("#doPrint").click(function(){
+            $(".adviceDetail").startLoading();
+            $(".print-content-body").printThis({
+                debug: true,
+                importCSS: true,
+                importStyle: true,
+                printContainer: true,
+                pageTitle: "&nbsp;",
+                removeInline: false,
+                printDelay: 333,
+                header: null,
+                formValues: true,
+                prepare:function(doc){
+                    doc.find("#heartRate-wrapper-inner").empty();
+                    show(doc.find("#heartRate-wrapper-inner"));
+                },
+                printing:function(doc){
+                    $(".adviceDetail").stopLoading();
+                }
+            });
+        });
+    })(jQuery);
+</script>
+</body>
+</html>

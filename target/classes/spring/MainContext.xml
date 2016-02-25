@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"
+       default-autowire="byName">
+
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config/config.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--新的数据库部分！-->
+    <bean id="dataSourceFactory" class="com.isnowfox.core.dao.DataSourceFactory">
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <!-- 数据库的用户名 -->
+        <property name="username" value="${jdbc.username}"/>
+        <!-- 数据库的密码 -->
+        <property name="password" value="${jdbc.password}"/>
+
+        <property name="maxNums" value="${jdbc.maxNums}"/>
+        <!-- 每个分区最小的连接数 -->
+        <property name="minNums" value="${jdbc.minNums}"/>
+        <!-- 分区数 ，默认值2，最小1，推荐3-4，视应用而定 -->
+        <property name="partitionNums" value="${jdbc.partitionNums}"/>
+    </bean>
+    <bean id="dataSource" factory-bean="dataSourceFactory"
+          factory-method="createBoneCPDataSource" destroy-method="close">
+    </bean>
+
+    <jdbc:initialize-database data-source="dataSource" enabled="${jdbc.init}" ignore-failures="DROPS">
+        <jdbc:script encoding="utf-8" location="classpath:sql/db-schema.sql"/>
+        <jdbc:script encoding="utf-8" location="classpath:sql/db-test-data.sql"/>
+    </jdbc:initialize-database>
+<!-- 
+    <bean name="filePathHelps" class="cn.ihealthbaby.data.helps.FilePathHelps"/>
+    <bean name="geoHelps" class="cn.ihealthbaby.data.helps.GeoHelps"/>
+    <bean name="lightHelps" class="cn.ihealthbaby.data.helps.LightHelps"/>
+ -->
+    <!--end旧的数据库部分！-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--<aop:aspectj-autoproxy/>-->
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!--国际化！-->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <array>
+                <value>classpath:messages/message</value>
+                <value>classpath:messages/sms</value>
+                <value>classpath:messages/form</value>
+            </array>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="cacheSeconds" value="0"/>
+    </bean>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"/>
+    </bean>
+    <!--end国际化！-->
+
+
+    <context:annotation-config/>
+    <context:component-scan base-package="cn.ihealthbaby.hospital.**">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="adminApiManager" class="cn.ihealthbaby.hospital.admin.client.ApiManager">
+        <constructor-arg >
+            <bean class="cn.ihealthbaby.hospital.admin.client.AdminHttpClientAdapterImpi">
+                <constructor-arg name="serverUrl" value="${port.serverUrl}"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
+
+    <import resource="classpath:cn/ihealthbaby/hospital/db/CacheDaoContext.xml"/>
+    <import resource="classpath*:config/JedisContext.xml"/>
+    <import resource="PortDaoContext.xml"/>
+    <import resource="MvcContext.xml"/>
+</beans>

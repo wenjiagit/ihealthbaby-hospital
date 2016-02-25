@@ -1,0 +1,165 @@
+<!--#set(UserDO form)-->
+<!--#set(BindingResult bindingResult)-->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+<link href="lib/silviomoreto-bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+
+</head>
+<body>
+<<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">修改孕妇信息</h3>
+			</div>
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form id="userForm" class="dialog-content" action="/staffManage/updateUser/${form.id}.do" method="post">
+						<div class="form-group">
+						<label style="margin-top: -30px">姓名:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-user" style="font-size: 18px"></i>
+							</div>
+								<input type="text" class="form-control"
+								   id="name" name="name" placeholder="姓名" value="${form.name}"/>
+						
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>联系电话:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-phone"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="telephone" name="telephone" placeholder="联系电话" value="${form.telephone}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">手机号:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa  fa-building" style="font-size: 18px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="mobile" name="mobile" placeholder="手机号" value="${form.mobile}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">出生日期: <span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-birthday-cake" style="font-size: 19px"></i>
+							</div>
+								<input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+								   id="birthday" name="birthday" placeholder="出生日期" value="${form.birthday.format('yyyy-MM-dd')}"/>
+
+						</div>
+						<!-- /.input group -->
+					</div>
+					
+					<div class="form-group">
+						<label style="margin-top: -30px">预产期:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar" style="font-size: 19px"></i>
+							</div>
+								<input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+								   id="deliveryTime" name="deliveryTime" placeholder="预产期" value="${form.deliveryTime.format('yyyy-MM-dd')}"/>
+						</div>
+					</div>
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">修改</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+<script src="lib/silviomoreto-bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="js/alone-form.min.js"></script>
+<script>
+		(function ($) {
+		    'use strict';
+			$("[data-mask]").inputmask();
+			function getOffsetDateByYear(offsetYear) {
+				var  date = new Date();
+				var  strYear  =  date.getFullYear()  + offsetYear;
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if(strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			//孕妇年龄段，用于更好的定制时间组件
+			var minAge = 15;//最小孕妇年龄
+			var maxAge = 60;//最大孕妇年龄
+			var aveAge = 15;//孕妇平均年龄
+			/*
+			 比如今年是2015年，那么孕妇年龄段为2015-60~2015-18 即：日期组件可选年份为：1955~1997 默认年份为2015-25 即：1990
+			 */
+			$('#birthday').datetimepicker({
+				scrollInput: false,
+				todayButton:false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart:(new Date().getFullYear())-maxAge,
+				yearEnd:(new Date().getFullYear())-minAge,
+				defaultDate: getOffsetDateByYear(-aveAge),//默认日期，当前向前推25年，因为孕妇生日大概集中在这个年龄段
+				minDate: getOffsetDateByYear(-maxAge),//默认日期向前推60年，孕妇一般不会超过60岁
+				maxDate: getOffsetDateByYear(-minAge),//默认日期向前推18年，孕妇一般不会小于18岁
+				timepicker: false
+			});
+
+			function getOffsetDateByDay(offsetDay) {
+				var  date = new Date();
+				date.setDate(date.getDate() + offsetDay);
+				var  strYear  =  date.getFullYear();
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if (strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			function getOffsetYear(offsetDay){
+				var dateStr = getOffsetDateByDay(offsetDay);
+				return dateStr.split('-')[0];
+			}
+			var preDay = 28; //预产期向前推的天数
+			var nextDay = 300;//预产期向后推的天数
+			$('#deliveryTime').datetimepicker({
+				scrollInput: false,
+				todayButton: false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart: getOffsetYear(-preDay),
+				yearEnd: getOffsetYear(nextDay),
+				minDate: getOffsetDateByDay(-preDay),
+				maxDate: getOffsetDateByDay(nextDay),
+				timepicker: false
+			});
+
+			<!--#if(bindingResult)-->
+		    $("#userForm").vaild($!{validJson(bindingResult)});
+			<!--#end-->
+		})(jQuery);
+
+</script>
+</body>
+</html>

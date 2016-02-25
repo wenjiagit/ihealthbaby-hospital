@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner sysUserList">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			$!{permName('insideService.insideServiceDeal')} <small>监护详情</small>
+		</h1>
+	</section>
+
+	<!-- Main content -->
+	<section class="content hospitalList">
+		<div class="box">
+			<div class="box-header">
+			</div>
+			<div class="box-body no-padding">
+				<div class="table-responsive mailbox-messages col-sm-10">
+					<form id="serviceForm" action="/insideService/insideServiceDeal.do" method="post">
+						<div class="box-header">
+							<h5 class="box-title text-light-blue" style="margin-left: -10px">孕妇信息</h5>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label style="margin-top: -15px">就诊卡号:<span style="color:red;font-size:28px; position: relative;top: 0px;left: 3px;"></span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="form-control"  type="text" id="caseNumber" name="caseNumber" placeholder="就诊卡号">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label style="margin-top:-30px">手机号:<span class="mobile_span" style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-fw fa-building"></i>
+											</div>
+											<input type="text" class="form-control insideService" id="mobile"  name="mobile" placeholder="手机号" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>孕妇姓名:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-fw fa-user"></i>
+											</div>
+											<input type="text" class="form-control" id="name"  name="name" placeholder="孕妇姓名" />
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>出生日期:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="datepicker form-control"  placeholder="出生日期" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+												   type="text" id="birthday" name="birthday">
+										</div>
+										<!-- /.input group -->
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>预产期:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="datepicker form-control" placeholder="预产期" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+												   type="text" id="deliveryTime" name="deliveryTime">
+										</div>
+									</div>
+								</div>
+								<div style="clear: both"></div>
+								<div class="box-header">
+									<h5 class="box-title text-light-blue" style="margin-top: 10px">监护信息</h5>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>科室:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-exchange"></i>
+											</div>
+											<select type="text" class="form-control" id="departmentId" name="departmentId">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>负责医生:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-user-md"></i>
+											</div>
+											<select name="doctorId" class="form-control" id="doctorId">
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="dialog-footer-buttons">
+							<input type="hidden" name="hospitalId" id="hospitalId" value="${hosid}">
+							<button class="btn btn-primary" style="margin:50px auto 50px auto" type="submit">开通监护</button>
+						</div>
+					</form>
+				</div>
+				<!-- /.mail-box-messages -->
+			</div>
+				<!-- /.box-body -->
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content-->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+		(function ($) {
+			'use strict';
+			$("[data-mask]").inputmask();
+			function getOffsetDateByYear(offsetYear) {
+				var  date = new Date();
+				var  strYear  =  date.getFullYear()  + offsetYear;
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if(strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			//孕妇年龄段，用于更好的定制时间组件
+			var minAge = 15;//最小孕妇年龄
+			var maxAge = 60;//最大孕妇年龄
+			var aveAge = 15;//孕妇平均年龄
+			/*
+			 比如今年是2015年，那么孕妇年龄段为2015-60~2015-18 即：日期组件可选年份为：1955~1997 默认年份为2015-25 即：1990
+			 */
+			$('#birthday').datetimepicker({
+				scrollInput: false,
+				todayButton:false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart:(new Date().getFullYear())-maxAge,
+				yearEnd:(new Date().getFullYear())-minAge,
+				defaultDate: getOffsetDateByYear(-aveAge),//默认日期，当前向前推25年，因为孕妇生日大概集中在这个年龄段
+				minDate: getOffsetDateByYear(-maxAge),//默认日期向前推60年，孕妇一般不会超过60岁
+				maxDate: getOffsetDateByYear(-minAge),//默认日期向前推18年，孕妇一般不会小于18岁
+				timepicker: false
+			});
+			function getOffsetDateByDay(offsetDay) {
+				var  date = new Date();
+				date.setDate(date.getDate() + offsetDay);
+				var  strYear  =  date.getFullYear();
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if (strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			function getOffsetYear(offsetDay){
+				var dateStr = getOffsetDateByDay(offsetDay);
+				return dateStr.split('-')[0];
+			}
+			var preDay = 28; //预产期向前推的天数
+			var nextDay = 300;//预产期向后推的天数
+			$('#deliveryTime').datetimepicker({
+				scrollInput: false,
+				todayButton: false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart: getOffsetYear(-preDay),
+				yearEnd: getOffsetYear(nextDay),
+				minDate: getOffsetDateByDay(-preDay),
+				maxDate: getOffsetDateByDay(nextDay),
+				timepicker: false
+			});
+
+			$(".insideService").blur(function(){
+				var insideServiceval=$(".insideService").val();
+				if(insideServiceval!=''&&insideServiceval!=null) {
+					if (!insideServiceval.match(/^1[3458]\d{9}$/)) {
+						alert("手机号码格式不正确！请重新输入");
+						$(".insideService").val('').focus();
+					}
+				}
+			})
+
+			$.get("service/belongDepartment.do",function(data){
+				if(data.status==0){
+					var list=data.data;
+					if(list!=null&&list.length>0){
+						var result="";
+						$.each(list,function(n,value){
+							result +="<option value='"+value.id+"'>"+value.department+"</option>";
+						});
+						$("#departmentId").html('');
+						$("#departmentId").append(result);
+						doctorlist();
+					}
+				}
+			},"json");
+			$("#departmentId").change(function(){
+				doctorlist();
+			});
+
+			var doctorlist=function(){
+				$.get("service/doctorList.do",{departmentid:$("#departmentId").val()},function(data){
+					if(data.status==0){
+						var list=data.data;
+						if(list!=null&&list.length>0){
+							var result="";
+							$.each(list,function(n,value){
+								result +="<option value='"+value.id+"'>"+value.name+"</option>";
+							});
+							$("#doctorId").html('');
+							$("#doctorId").append(result);
+						}else{
+							$("#doctorId").html("<option value='0'>尚未添加医生</option>");
+						}
+					}
+				},"json");
+			};
+
+			$(document).ready(function () {
+				$("#caseNumber").focus();
+			})
+			$(document).on('blur',"#mobile",function(){
+				if($("#mobile").val()!=""){
+				$.get("service/autoComplete.do",{mobile:$("#mobile").val()},function(data){
+					if(data.status==0){
+						var user=data.data;
+						if(user!=null||user!=user){
+							$("input[name='mobile']").val(user.mobile).prop("readonly","readonly");
+							$("input[name='name']").val(user.name).prop("readonly","readonly");
+							$("input[name='birthday']").val(user.birthday.substr(0,10)).datetimepicker('destroy').prop("readonly","readonly");
+							$("input[name='deliveryTime']").val(user.deliveryTime.substr(0,10)).datetimepicker('destroy').prop("readonly","readonly");
+							if(user.caseNumber==''||user.caseNumber==null){
+								$("input[name='caseNumber']").val("");
+							}
+							else{
+								$("input[name='caseNumber']").val(user.caseNumber).prop("readonly","readonly");
+							}
+						}
+					}
+				},"json");
+				}
+			});
+			$(document).on('blur',"#caseNumber",function(){
+				if($("#caseNumber").val()!=""){
+				$.get("service/autoCompleteBycaseNum.do",{caseNumber:$("#caseNumber").val()},function(data){
+					if(data.status==0){
+						var user=data.data;
+						if(user!=null||user!=user){
+							if(user.caseNumber==''||user.caseNumber==null){
+								$("input[name='caseNumber']").val("");
+							}
+							else{
+								$("input[name='caseNumber']").val(user.caseNumber).prop("readonly","readonly");
+							}
+							$("input[name='mobile']").val(user.mobile).prop("readonly","readonly");
+							$("input[name='name']").val(user.name).prop("readonly","readonly");
+							$("input[name='birthday']").val(user.birthday.substr(0,10)).datetimepicker('destroy').prop("readonly","readonly");
+							$("input[name='deliveryTime']").val(user.deliveryTime.substr(0,10)).datetimepicker('destroy').prop("readonly","readonly");
+						}
+					}
+				},"json");
+				}
+			});
+
+			$("#serviceForm").submit(function(){
+				var form = $(this);
+				form.startLoading();
+					$.ajax({
+						cache: false,
+						dataType: "json",
+						type: form.attr("method"),
+						url: form.attr("action"),
+						data: form.serialize(),
+						error: function (request) {
+							form.stopLoading();
+							$.alert(request);
+						},
+						success: function (data) {
+							form.stopLoading();
+							if (data.status == 1) {
+								form.vaild(data.msgMap);
+							} else if (data.status == 0) {
+								if (data.data == 1) {
+									$.alert("尚有未结束服务！");
+								} else {
+									index.loadContent("/insideService/insideServiceList.do")
+								}
+
+
+							} else {
+								$.alert(data.msg);
+							}
+						}
+					});
+
+				return false;
+			});
+		})(jQuery);
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!--#set(LoginForm form)-->
+<!--#set(BindingResult bindingResult)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    ${include('/commons/head.httl',['name':m('module.login')])}
+</head>
+<body class="login-page">
+<div class="login-logo">
+    <b style="color:#5ECA7F">$!{m('web.name')}</b>
+</div><!-- /.login-logo -->
+<div class="login-box">
+    <div class="login-box-body">
+        <!--<p class="login-box-msg">$!{m('module.login')}</p>-->
+        <img src="../img/logo.jpg"  class="login_img"/>
+        <form id="login-form" action="login.do" method="post">
+            <div class="form-group has-feedback">
+                <input id="error1" name="error1" type="hidden">
+                <span class="glyphicon glyphicon-user" style="position:absolute;bottom:17px;top:auto;"></span>
+                <input type="text" id="name" name="name" class="form-control login_input" placeholder="$!{m('loginForm.name')}" value="${form.name}" />
+            </div>
+            <div class="form-group has-feedback">
+                <span class="glyphicon glyphicon-lock" style="position:absolute;bottom:17px;top:auto;"></span>
+                <input type="password" id="password" name="password" class="form-control login_input" placeholder="$!{m('loginForm.password')}"  value="${form.password}" />
+            </div>
+            <!--<div class="row">-->
+            <!--<div class="col-xs-8" style="margin-top: -22px">-->
+            <!--<div class="checkbox icheck">-->
+            <!--<label>-->
+            <!--<input type="checkbox"> $!{m('module.account.rememberMe')}-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>&lt;!&ndash; /.col &ndash;&gt;-->
+            <!--<div class="col-xs-4  forgot_btn">-->
+            <!--<a href="#" >$!{m('module.account.forgotPass')}</a><br>-->
+            <!--</div>&lt;!&ndash; /.col &ndash;&gt;-->
+            <!--</div>-->
+            <div class="row" style="margin-top:25px;margin-bottom: 12px">
+                <div style="width: 60%;margin-left:20%;">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat btn-login" style=" height: 50px;border-radius: 40px;box-shadow:0 2px 52px #67b5eb;font-size: 16px;margin-bottom: 20px">$!{m('module.login')}</button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+</body>
+${include('/commons/foot.httl')}
+<script>
+    (function ($) {
+        'use strict';
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+        <!--#if(bindingResult)-->
+        $("#login-form").vaild($!{validJson(bindingResult)});
+        <!--#end-->
+    })(jQuery);
+</script>
+</body>
+</html>

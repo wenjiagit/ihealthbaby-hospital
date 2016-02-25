@@ -1,0 +1,92 @@
+<!--#set(List<DepartmentDO> departmentlist)-->
+<!--#set(DepartmentDO dep)-->
+<!--#set(Long hosId)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="col-md-6">
+		<div class="box box-danger ">
+			<div class="box-header">
+				<h3 class="box-title">科室管理</h3>
+			</div>
+			<div  class="box-body dialog-content">
+				<div class="form-group" id="deplist">
+					<table class="table">
+					<!--#for(dep:departmentlist)-->
+					<tr class="active">
+						<td><input type="text" class="form-control"
+							   id="text${dep.id}"  placeholder="科室"  value="${dep.department}"/></td>
+						<td><button id="${dep.id}" class="btn btn-sm btn-primary depUpdate">修改</button></td>
+					</tr>
+					<!--#end-->
+						<tr class="active">
+							<td><input type="text" class="form-control"
+									   id="newDep"  placeholder="科室"  /></td>
+							<td><button id="addNewDep" class="btn btn-sm btn-primary">添加</button></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+(function ($) {
+    'use strict';
+	$(".depUpdate").click(function(e){
+		var id = $(e.target).attr("id");
+		var department=$("#text"+id).val();
+		if(department==""){
+			$.alert("科室名不能为空");
+			return false;
+		}
+		$.ajax({
+			url : "sysManage/updateDepartment.do",
+			data : {department:department,id:id},
+			type : 'post',
+			dataType : "json",
+			cache : false,
+			error : function(textStatus, errorThrown) {
+			},
+			success : function(data) {
+				if(data.status==0){
+					$.alert("修改成功");
+				}
+			}
+		});
+	});
+	$("#addNewDep").click(function(){
+		var id =${hosId};
+		var department=$("#newDep").val();
+		if(department==""){
+			$.alert("科室名不能为空");
+			return false;
+		}
+		$.ajax({
+			url : "sysManage/addDepartment.do",
+			data : {department:department,hosId:id},
+			type : 'post',
+			dataType : "json",
+			cache : false,
+			error : function(textStatus, errorThrown) {
+			},
+			success : function(data) {
+				if(data.status==0){
+					$.alert("添加成功");
+					index.loadContent("sysManage/"+id+"/getHospitalDepartment.do");
+				}
+			}
+		});
+	});
+})(jQuery);
+</script>
+</body>
+</html>

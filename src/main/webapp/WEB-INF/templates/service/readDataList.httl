@@ -1,0 +1,173 @@
+<!--#set(ReadDataModel model) -->
+<!--#set(PageResult page)-->
+<!--#set(ReadDataQueryForm form)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('readData.readDataList')} <small>监护列表</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content hospitalList">
+			<div class="box">
+				<div class="box-header with-border" style="margin-left: -12px;">
+						<!-- /.btn-group -->
+					<form id="searchForm" action="/service/ServiceList.do" method="get">
+						<div id="search_div">
+							<div class="col-md-3 col-sm-4 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span  class="btn btn-default">监护类型</span>
+									</div>
+									<select class="form-control search_input" type="text" name="adviceType" >
+										<option value="-1" #if(form.adviceType=='-1') selected #end>不限</option>
+										<option value="0" #if(form.adviceType=='0') selected #end>院内</option>
+										<option value="1" #if(form.adviceType=='1') selected #end>院外</option>
+									</select>
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-4 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn ">
+										<span class="btn btn-default">负责医生</span>
+									</div>
+									<input class="form-control search_input" type="text" name="doctorname" value="${form.doctorname}" >
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-4 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span class="btn btn-default">咨询单号</span>
+									</div>
+									<input class="form-control search_input" type="text" name="adviceId" value="${form.adviceId}">
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-4 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span  class="btn btn-default">孕妇姓名</span>
+									</div>
+									<input class="form-control search_input" type="text" name="username" value="${form.username}" >
+								</div>
+							</div>
+
+							<div  class="col-md-3 col-sm-4 col-xs-6">
+								<input type="hidden" name="page" value="1">
+								<input type="hidden" name="pageSize" value="${form.pageSize}">
+								<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+								<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll" class="th_checkbox_btn" /><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty" style="padding-left: 20px">咨询单号</th>
+									<th class="table_th_sty">孕妇姓名</th>
+									<!--#if(perm('readData.readDataList'))-->
+									<th class="table_th_sty">所属医院</th>
+									<!--#end-->
+									<th class="table_th_sty">负责医生</th>
+									<th class="table_th_sty">监护时间</th>
+									<th class="table_th_sty">监护孕周</th>
+									<th class="table_th_sty">问医时间</th>
+									<th class="table_th_sty">等待时间</th>
+									<th class="table_th_sty">监护类型</th>
+									<th class="table_th_sty">监护状态</th>
+									<th class="table_th_sty">详情</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(model : page.value)  -->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${model.id}" /></td>-->
+									<td style="padding-left: 20px">${NumberFormat(model.adviceNumber)}</td>
+									<td>${model.userDO.name}</td>
+									<!--#if(perm('readData.readDataList'))-->
+									<td>${model.hospitalDO.name}</td>
+									<!--#end-->
+									<td>${model.sysUserDO.name}</td>
+									<td>${model.testTime.format("MM-dd HH:mm")}</td>
+									<td>${model.gestationalWeeks}</td>
+									<td>${model.askTime.format("MM-dd HH:mm")}</td>
+									<td>${model.waitTime}</td>
+									<!--#if(model.adviceType==0)-->
+									<td>院内</td>
+									<!--#else(model.adviceType==1)-->
+									<td>院外</td>
+									<!--#end-->
+									<!--#if(model.status==0)-->
+									<td>未咨询</td>
+									<!--#else(model.status==1)-->
+									<td>未回复</td>
+									<!--#else(model.status==2)-->
+									<td>已回复</td>
+									<!--#else(model.status==3)-->
+									<td>已删除</td>
+									<!--#end-->
+									<td><button class="btn btn-sm btn-primary datadetail" id="${model.adviceAskDO.id}">详情</button></td>
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+					$!{page(page,"index.loadContent('/service/readDataList.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="build/js/index.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			var page = $(".hospitalList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#refresh").click(function(){
+				index.loadContent("service/readDataList.do");
+			});
+			page.find(".datadetail").click(function(e){
+				var id= $(e.target).attr("id");
+				index.loadContent("/advice/adviceDetail.do?id="+id);
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("service/readDataList.do?"+form.serialize());
+				return false;
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>

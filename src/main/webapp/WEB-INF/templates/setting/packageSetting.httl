@@ -1,0 +1,178 @@
+<!--#set(HospitalPackageModel model)-->
+<!--#set(RentSetModel rentModel)-->
+<!--#set(ProductDO product)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('sysManage.rentSetting')}
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content setting">
+			<div class="box box-primary">
+				<div class="box-header with-border"style="padding: 10px 10px">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="box box-primary box-solid">
+								<div class="box-header with-border">
+									<h3 class="box-title">套餐</h3>
+								</div>
+								<div class="box-body">
+									<table class="table">
+										<tr class="danger">
+											<!--#for(product:model.forgift)-->
+											<th>${product.name}</th>
+											<th>${product.innerAmount}台</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="a${product.id}" class="btn btn-primary btn-xs delItem" >移除</button></th>
+											<!--#end-->
+										</tr>
+										<!--#for(product:model.dayRent)-->
+										<tr class="success">
+											<th>${product.name}</th>
+											<th><!--#if(product.innerAmount == '-1')-->不限<!--#else-->${product.innerAmount}<!--#end-->天</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="b${product.id}" class="btn btn-primary btn-xs delItem" >移除</button></th>
+										</tr>
+										<!--#end-->
+										<!--#for(product:model.askPrice)-->
+										<tr class="info">
+
+											<th>${product.name}</th>
+											<th><!--#if(product.innerAmount == '-1')-->不限<!--#else-->${product.innerAmount}<!--#end-->次</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="c${product.id}" class="btn btn-primary btn-xs delItem" >移除</button></th>
+										</tr>
+										<!--#end-->
+										<tr class="warning">
+											<!--#for(product:model.couplant)-->
+											<th>${product.name}</th>
+											<th>${product.innerAmount}盒</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="d${product.id}" class="btn btn-primary btn-xs delItem" >移除</button></th>
+											<!--#end-->
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="box box-primary box-solid">
+								<div class="box-header with-border">
+									<h3 class="box-title">可选套餐项</h3>
+								</div>
+								<div class="box-body">
+									<table class="table">
+										<tr class="danger">
+											<!--#for(product:rentModel.foregift)-->
+											<th>${product.name}</th>
+											<th>${product.innerAmount}台</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="itema${product.id}" class="btn btn-primary btn-xs addItem" >加入套餐</button></th>
+											<!--#end-->
+										</tr>
+										<!--#for(product:rentModel.dayRent)-->
+										<tr class="success">
+											<th>${product.name}</th>
+											<th><!--#if(product.innerAmount == '-1')-->不限<!--#else-->${product.innerAmount}<!--#end-->天</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="itemb${product.id}" class="btn btn-primary btn-xs addItem" >加入套餐</button></th>
+										</tr>
+										<!--#end-->
+
+										<!--#for(product:rentModel.askPrice)-->
+										<tr class="info">
+											<th>${product.name}</th>
+											<th><!--#if(product.innerAmount == '-1')-->不限<!--#else-->${product.innerAmount}<!--#end-->次</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="itemc${product.id}" class="btn btn-primary btn-xs addItem" >加入套餐</button></th>
+										</tr>
+										<!--#end-->
+										<!--#for(product:rentModel.couplant)-->
+										<tr class="warning">
+											<th>${product.name}</th>
+											<th>${product.innerAmount}盒</th>
+											<th>${getAccountantMoney(product.price)}元</th>
+											<th><button id="itemd${product.id}" class="btn btn-primary btn-xs addItem" >加入套餐</button></th>
+										</tr>
+										<!--#end-->
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+	</section>
+		</div>
+	<!-- /.content -->
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="js/index.min.js" type="text/javascript"></script>
+	<script>
+
+		(function ($) {
+			"use strict";
+			var page=$('.setting');
+            page.find(".addItem").click(function(e){
+				var str=$(e.target).attr("id");
+				var pid=str.substr(5,str.length);
+
+				var params={
+					id:'${model.id}',
+					productId:pid
+				}
+				$.ajax({
+					url : "setting/addPackageItem.do",
+					data : params,
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							if(data.data==0){
+								index.loadContent('setting/packageSetting.do');
+							}if(data.data==1){
+								$.alert("套餐中已存在此类型产品");
+							}
+						}
+					}
+				});
+			});
+			page.find(".delItem").click(function(e){
+				var str=$(e.target).attr("id");
+				var pid=str.substr(1,str.length);
+
+				var params={
+					id:'${model.id}',
+					productId:pid
+				}
+				$.ajax({
+					url : "setting/delPackageItem.do",
+					data : params,
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							index.loadContent('setting/packageSetting.do');
+						}
+					}
+				});
+			});
+
+	})(jQuery);
+</script>
+</body>
+</html>

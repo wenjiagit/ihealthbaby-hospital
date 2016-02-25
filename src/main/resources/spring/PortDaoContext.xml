@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--新的数据库部分！-->
+    <bean id="portDataSourceFactory" class="com.isnowfox.core.dao.DataSourceFactory">
+        <property name="jdbcUrl" value="${port.jdbc.url}"/>
+        <!-- 数据库的用户名 -->
+        <property name="username" value="${port.jdbc.username}"/>
+        <!-- 数据库的密码 -->
+        <property name="password" value="${port.jdbc.password}"/>
+
+        <property name="maxNums" value="${port.jdbc.maxNums}"/>
+        <!-- 每个分区最小的连接数 -->
+        <property name="minNums" value="${port.jdbc.minNums}"/>
+        <!-- 分区数 ，默认值2，最小1，推荐3-4，视应用而定 -->
+        <property name="partitionNums" value="${jdbc.partitionNums}"/>
+        <property name="readOnly" value="true"/>
+    </bean>
+    <bean id="portDataSource" factory-bean="portDataSourceFactory"
+          factory-method="createBoneCPDataSource" destroy-method="close">
+    </bean>
+    <bean id="userReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.UserReadOnlyDao" p:dataSource-ref="portDataSource"/>
+  	<bean id="serviceReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.ServiceReadOnlyDao" p:dataSource-ref="portDataSource"/>
+ 	<bean id="hospitalReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.HospitalReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="hospitalFetalheartReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.HospitalFetalheartReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="provincesReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.ProvincesReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="citiesReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.CitiesReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="areasReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.AreasReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="departmentReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.DepartmentReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="adviceEcgDataReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.AdviceEcgDataReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="productReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.ProductReadOnlyDao" p:dataSource-ref="portDataSource" />
+    <bean id="adviceReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.AdviceReadOnlyDao" p:dataSource-ref="portDataSource" />
+    <bean id="adviceAskReadOnlyDao" class="cn.ihealthbaby.data.db.dao.readonly.AdviceAskReadOnlyDao" p:dataSource-ref="portDataSource" />
+    <bean id="adviceReplyReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.AdviceReplyReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="orderReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.OrderReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="orderItemReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.OrderItemReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="serviceInsideReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.ServiceInsideReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="hospitalPackageSettingReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.HospitalPackageSettingReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="addressReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.AddressReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="hospitalAdviceSettingReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.HospitalAdviceSettingReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="adviceDataReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.AdviceDataReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="refundReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.RefundReadOnlyDao" p:dataSource-ref="portDataSource"/>
+    <bean id="sysUserReadOnlyDao"  class="cn.ihealthbaby.data.db.dao.readonly.SysUserReadOnlyDao" p:dataSource-ref="portDataSource"/>
+</beans>

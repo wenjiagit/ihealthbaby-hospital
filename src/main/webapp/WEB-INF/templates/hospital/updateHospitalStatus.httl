@@ -1,0 +1,158 @@
+<!-- #set(HospitalDO hospital) -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">$!{permName('hosManage.hosptialInfoList.update')}</h3>
+			</div>
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form id="hospitalist" class="dialog-content" action="sysManage/updateHospitalStatus.do" method="post">
+					<div class="form-group">
+						<label>医院名称:</label> <label>${hospital.name}</label>
+					</div>
+					<div class="form-group">
+						<label>是否启用:</label>
+							<input type="hidden" name="hospitalId" value="${hospital.id}"/>
+							<!--#if(hospital.isDelete == true)-->
+							<input type="radio" name="isDelete"  value="true" checked/>禁用
+							<input type="radio"  name="isDelete"  value="false"/>启用
+							<!--#else-->
+							<input type="radio"  name="isDelete"  value="true" />禁用
+							<input type="radio"  name="isDelete"  value="false" checked/>启用
+							<!--#end-->
+					</div>
+					<div class="form-group">
+						<label>是否支持院内:</label>
+							<!--#if(hospital.supportInside == true)-->
+							<input type="radio"  name="supportInside"  value="true" checked/>支持
+							<input type="radio"  name="supportInside"  value="false"/>不支持
+							<!--#else-->
+							<input type="radio" name="supportInside"  value="true" />支持
+							<input type="radio" name="supportInside"  value="false" checked/>不支持
+							<!--#end-->
+					</div>
+					<div class="form-group">
+						<label>是否支持院外:</label>
+							<!--#if(hospital.supportOutside == true)-->
+							<input type="radio"   name="supportOutside"  value="true" checked/>支持
+							<input type="radio"   name="supportOutside"  value="false"/>不支持
+							<!--#else-->
+							<input type="radio"   name="supportOutside"  value="true" />支持
+							<input type="radio"   name="supportOutside"  value="false" checked/>不支持
+							<!--#end-->
+					</div>
+					<div class="form-group">
+						<label>是否支持APP:</label>
+							<!--#if(hospital.supportApp == true)-->
+							<input type="radio"  name="supportApp"  value="true" checked/>支持
+							<input type="radio"  name="supportApp"  value="false"/>不支持
+							<!--#else-->
+							<input type="radio"   name="supportApp"  value="true" />支持
+							<input type="radio"   name="supportApp"  value="false" checked/>不支持
+							<!--#end-->
+					</div>
+					<div class="form-group">
+						<label>是否支持邮寄:</label>
+							<!--#if(hospital.supportExpress == true)-->
+							<input type="radio"   name="supportExpress"  value="true" checked/>支持
+							<input type="radio"   name="supportExpress"  value="false"/>不支持
+							<!--#else-->
+							<input type="radio"   name="supportExpress"  value="true" />支持
+							<input type="radio"   name="supportExpress"  value="false" checked/>不支持
+							<!--#end-->
+					</div>
+				
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">提交修改</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+	(function ($) {
+		if($("input[name=isDelete]:checked").val() == 'true'){
+			
+			$("input[name=supportInside]:eq(1)").prop("checked",true);
+			$("input[name=supportOutside]:eq(1)").prop("checked",true);
+			$("input[name=supportApp]:eq(1)").prop("checked",true);
+			$("input[name=supportExpress]:eq(1)").prop("checked",true);
+			$("input[name=supportInside]").prop("disabled",true);
+			$("input[name=supportOutside]").prop("disabled",true);
+			$("input[name=supportApp]").prop("disabled",true);
+			$("input[name=supportExpress]").prop("disabled",true);
+		}
+		if($("input[name=supportOutside]:checked").val() == 'false'){
+			$("input[name=supportApp]:eq(1)").prop("checked",true);
+			$("input[name=supportExpress]:eq(1)").prop("checked",true);
+			$("input[name=supportApp]").prop("disabled",true);
+			$("input[name=supportExpress]").prop("disabled",true);
+		}
+		if($("input[name=supportApp]:checked").val() == 'false'){
+			$("input[name=supportExpress]:eq(1)").prop("checked",true);
+			$("input[name=supportExpress]").prop("disabled",true);
+		}
+		$("input[name=isDelete]").change(function() { 
+			if($("input[name=isDelete]:checked").val() == 'true'){
+				
+				$("input[name=supportInside]:eq(1)").prop("checked",true);
+				$("input[name=supportOutside]:eq(1)").prop("checked",true);
+				$("input[name=supportApp]:eq(1)").prop("checked",true);
+				$("input[name=supportExpress]:eq(1)").prop("checked",true);
+				$("input[name=supportInside]").prop("disabled",true);
+				$("input[name=supportOutside]").prop("disabled",true);
+				$("input[name=supportApp]").prop("disabled",true);
+				$("input[name=supportExpress]").prop("disabled",true);
+			}else{
+				$("input[name=supportInside]").prop("disabled",false);
+				$("input[name=supportOutside]").prop("disabled",false);
+				$("input[name=supportApp]").prop("disabled",false);
+				$("input[name=supportExpress]").prop("disabled",false);
+				if($("input[name=supportOutside]:checked").val() == 'false'){
+					$("input[name=supportApp]:eq(1)").prop("checked",true);
+					$("input[name=supportExpress]:eq(1)").prop("checked",true);
+					$("input[name=supportApp]").prop("disabled",true);
+					$("input[name=supportExpress]").prop("disabled",true);
+				}
+			}
+				
+		}); 
+		$("input[name=supportOutside]").change(function() { 
+			if($("input[name=supportOutside]:checked").val() == 'false'){
+				$("input[name=supportApp]:eq(1)").prop("checked",true);
+				$("input[name=supportExpress]:eq(1)").prop("checked",true);
+				$("input[name=supportApp]").prop("disabled",true);
+				$("input[name=supportExpress]").prop("disabled",true);
+			}else{
+				$("input[name=supportApp]").prop("disabled",false);
+				$("input[name=supportExpress]").prop("disabled",false);
+				if($("input[name=supportApp]:checked").val() == 'false'){
+					$("input[name=supportExpress]:eq(1)").prop("checked",true);
+					$("input[name=supportExpress]").prop("disabled",true);
+				}
+			}
+		}); 
+		$("input[name=supportApp]").change(function() { 
+			if($("input[name=supportApp]:checked").val() == 'false'){
+				$("input[name=supportExpress]:eq(1)").prop("checked",true);
+				$("input[name=supportExpress]").prop("disabled",true);
+			}else{
+				$("input[name=supportExpress]").prop("disabled",false);
+			}
+		}); 
+		
+
+})(jQuery);
+</script>
+</body>
+</html>

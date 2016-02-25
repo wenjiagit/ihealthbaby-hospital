@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="timeZone" class="com.isnowfox.spring.TimeZoneInit">
+        <constructor-arg value="Asia/Shanghai"/>
+    </bean>
+    <!--<context:annotation-config/>-->
+    <!-- 把标记了@Controller和@service注解的类转换为bean -->
+    <context:component-scan base-package="cn.ihealthbaby.hospital.controller"/>
+
+
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射
+    <bean
+        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+    -->
+
+    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+
+    <bean id="objectMapper" class="com.isnowfox.util.JsonUtils" factory-method="create">
+        <constructor-arg name="isNoDefault" value="false"/>
+    </bean>
+
+     <bean id="viewResolver" class="cn.ihealthbaby.hospital.httl.HttlViewResolver"
+           p:order="0" p:contentType="text/html; charset=UTF-8"/>
+
+    <mvc:view-resolvers order="1">
+        <mvc:content-negotiation>
+            <mvc:default-views>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+                    <property name="objectMapper" ref="objectMapper"/>
+                    <property name="encoding" value="UTF8"/>
+                </bean>
+            </mvc:default-views>
+        </mvc:content-negotiation>
+    </mvc:view-resolvers>
+
+    <mvc:annotation-driven conversion-service="conversionService" validator="validator">
+        <mvc:message-converters>
+            <bean class="com.isnowfox.spring.NoCacheMappingJacksonHttpMessageConverter">
+                <property name="objectMapper" ref="objectMapper"/>
+                <property name="encoding" value="UTF8"/>
+            </bean>
+        </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="com.isnowfox.spring.AccountParamArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <bean class="cn.ihealthbaby.hospital.UserAccountHandlerInterceptor"/>
+    </mvc:interceptors>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <bean id="methodValidationPostProcessor"
+          class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.isnowfox.spring.DateConverter"/>
+                <bean class="com.isnowfox.spring.StringTrimConverter"/>
+            </set>
+        </property>
+    </bean>
+    <!--
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            </list>
+        </property>
+    -->
+    <bean id="exceptionResolver" class="cn.ihealthbaby.hospital.ManagerJsonMappingExceptionResolver"/>
+</beans>

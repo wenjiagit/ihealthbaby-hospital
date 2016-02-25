@@ -1,0 +1,189 @@
+<!--#set(ReplyDataModel model) -->
+<!--#set(PageResult page)-->
+<!--#set(ReplyQueryForm form)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('readData.replyList')} <small>监护列表</small>
+			</h1>
+		</section>
+		<!-- Main content -->
+		<section class="content hospitalList">
+			<div class="box">
+				<div class="box-header with-border">
+					<form id="searchForm" action="/service/ServiceList.do" method="get">
+						<div id="search_div">
+							<div class="col-md-3 col-sm-6 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span  class="btn btn-default">监护类型</span>
+									</div>
+									<select class="form-control search_input" type="text" name="adviceType" >
+										<option value="-1" #if(form.adviceType=='-1') selected #end>不限</option>
+										<option value="0" #if(form.adviceType=='0') selected #end>院内</option>
+										<option value="1" #if(form.adviceType=='1') selected #end>院外</option>
+									</select>
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-6 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span class="btn btn-default">负责医生</span>
+									</div>
+									<input class="form-control search_input" type="text" name="doctorname" value="${form.doctorname}">
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-6 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span class="btn btn-default">咨询单号</span>
+									</div>
+									<input class="form-control search_input" type="text" name="adviceId" value="${form.adviceId}" >
+								</div>
+							</div>
+							<div  class="col-md-3  col-sm-6 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span  class="btn btn-default">孕妇姓名</span>
+									</div>
+									<input class="form-control search_input " type="text" name="username" value="${form.username}">
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-6">
+								<div class="input-group input-group-sm">
+									<div class="input-group-btn">
+										<span  class="btn btn-default">判读结果</span>
+									</div>
+									<select class="form-control search_input" type="text" name="replyResult" >
+										<option value="-2" #if(form.replyResult=='-2') selected #end>不限</option>
+										<option value="0" #if(form.replyResult=='0') selected #end>正常型</option>
+										<option value="1" #if(form.replyResult=='1') selected #end>反应性</option>
+										<option value="2" #if(form.replyResult=='2') selected #end>可疑型</option>
+										<option value="3" #if(form.replyResult=='3') selected #end>无反应型</option>
+										<option value="-1" #if(form.replyResult=='-1') selected #end>医生判读</option>
+									</select>
+								</div>
+							</div>
+							<div  class="col-md-3 col-sm-4 col-xs-6">
+								<input type="hidden" name="page" value="1">
+								<input type="hidden" name="pageSize" value="${form.pageSize}">
+								<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+								<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll" class="th_checkbox_btn" /><span style="padding-left: 10px">全选</span></th>-->
+									<th style="padding-left: 20px"></th>
+									<th class="table_th_sty">咨询单号</th>
+									<th class="table_th_sty">孕妇姓名</th>
+									<th class="table_th_sty">监护时间</th>
+									<th class="table_th_sty">监护孕周</th>
+									<th class="table_th_sty">监护时长</th>
+									<th class="table_th_sty">产检医生</th>
+									<th class="table_th_sty">咨询时间</th>
+									<th class="table_th_sty">回复时间</th>
+									<th class="table_th_sty">监护类型</th>
+									<th class="table_th_sty">判读结果</th>
+									<th class="table_th_sty">详情</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(model : page.value)  -->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${model.id}" /></td>-->
+									<td style="padding-left: 20px">
+										<!--#if(model.replyResult=='-1')--><span style="font-size:1.4em;color:grey" title="医生判读">●</span>
+										<!--#else(model.replyResult=='0')--><span style="font-size:1.4em;color:#000000" title="正常型">●</span>
+										<!--#else(model.replyResult=='1')--><span style="font-size:1.4em;color:#00BB00" title="反应型">●</span>
+										<!--#else(model.replyResult=='2')--><span style="font-size:1.4em;color:yellow" title="可疑型">●</span>
+										<!--#else(model.replyResult=='3')--><span style="font-size:1.4em;color:#CC0000" title="无反应型">●</span></td>
+										<!--#end-->
+
+									<td>${NumberFormat(model.adviceDO.adviceNumber)}</td>
+									<td><a href="javascript:void(0)" id="${model.userDO.name}" class="toHistory">${model.userDO.name}</a></td>
+									<td>${model.adviceDO.testTime.format("MM-dd HH:mm")}</td>
+									<td>${model.adviceDO.gestationalWeeks}</td>
+									<td>${FormatTestTime(model.adviceDO.testTimeLong)}</td>
+									<td>${model.sysUserDO.name}</td>
+									<td>${model.adviceAskDO.askTime.format("MM-dd HH:mm")}</td>
+									<td>${model.replyTime.format("MM-dd HH:mm")}</td>
+									<td><!--#if(model.adviceDO.adviceType=='0')-->院内<!--#else(model.adviceDO.adviceType=='1')-->院外<!--#end--></td>
+									<td><!--#if(model.replyResult=='-1')-->医生判读
+										<!--#else(model.replyResult=='0')-->正常型
+										<!--#else(model.replyResult=='1')-->反应性
+										<!--#else(model.replyResult=='2')-->可疑型
+										<!--#else(model.replyResult=='3')-->无反应型
+									<!--#end--></td>
+									<td><button class="btn btn-sm btn-primary datadetail" id="${model.id}">详情</button></td>
+
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+					$!{page(page,"index.loadContent('/advice/replyDataList.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="build/js/index.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			var page = $(".hospitalList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#refresh").click(function(){
+				index.loadContent("advice/replyDataList.do");
+			});
+			page.find(".datadetail").click(function(e){
+				var id= $(e.target).attr("id");
+				index.loadContent("/advice/replyDetail.do?id="+id);
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("advice/replyDataList.do?"+form.serialize());
+				return false;
+			});
+			page.find(".toHistory").click(function(e){
+				var id = $(e.target).attr("id");
+				var form = $("#searchForm");
+				index.loadContent("advice/replyDataList.do?adviceType=-1&doctorname=&adviceId=&username="+id+"&replyResult=-2&page=1&pageSize=10");
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>

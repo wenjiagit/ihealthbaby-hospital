@@ -1,0 +1,95 @@
+<!--#set(List<AdviceModel> advice) -->
+<!--#set(AdviceModel adv) -->
+<!-- #set(DoctorForm sysUserDO) -->
+<!--#set(DepartmentDO dep)-->
+<!--#set(Map<String,Long> map)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner doctorDetail">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div style="border-bottom: 2px solid #3498DB;padding-bottom: 5px">
+				<span style="font-size: 24px;">$!{permName('doctor.doctorDetail')}</span> <small>医生详情</small>
+			</div>
+		</section>
+
+		<section class="content" style="padding: 0;margin: 0">
+			<div class="content row">
+				<div class="box box-primary" style="margin-top:-15px">
+					<div class="box-header">
+						<div class="col-md-12">
+							<div class="user-panel" style="margin-left: -15px">
+								<div class="img" style="float: left;">
+									<img src="${sysUserDO.headPic}?imageMogr2/thumbnail/500x500" height="120" width="120" class="img-circle"/>
+								</div>
+								<div style="float: left;margin-top: 20px;">
+									<div class="col-md-4 col-xs-6 user_details">姓名：<span class="user_details_val">${sysUserDO.name}</span></div>
+									<div class="col-md-8 col-xs-6 user_details">手机号：<span class="user_details_val">${sysUserDO.mobile}</span></div>
+									<div class="col-md-4 col-xs-6 user_details">级别：<span class="user_details_val">${sysUserDO.title}</span></div>
+									<div class="col-md-8 col-xs-6 user_details">科室：<span class="user_details_val" style="margin-left: 17px">${dep.department}</span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="doctor_sty">
+					<div class="box-header">
+						<div class="col-md-12">
+							<div style="clear: both;"></div>
+							<div class="doctor_whf">未回复 ${map.whf}</div>
+							<div class="doctor_yhf">已回复${map.yhf}</div>
+							<div style="clear: both"></div>
+						</div>
+					</div>
+				</div>
+				<div class="box box-primary">
+					<table class="table table-hover table-striped table_height">
+						<thead>
+						<tr class="info">
+							<th class="table_th_sty" style="padding-left: 20px">咨询单号</th>
+							<th class="table_th_sty">孕妇名</th>
+							<th class="table_th_sty">手机号</th>
+							<th class="table_th_sty">咨询时间</th>
+							<th class="table_th_sty">孕周</th>
+							<th class="table_th_sty">监护时长</th>
+							<th class="table_th_sty">监护状态</th>
+						</tr>
+						</thead>
+						<tbody>
+						<!--#for(adv : advice)-->
+						<tr>
+							<td>${NumberFormat(adv.adviceNumber)}</td>
+							<td>${adv.userDO.name}</td>
+							<td>${adv.userDO.mobile}</td>
+							<td>${adv.askTime}</td>
+							<td>${adv.gestationalWeeks}</td>
+							<td>${FormatTestTime(adv.testTimeLong)}</td>
+							<td>
+								<!--#if(adv.status==0)-->未咨询
+								<!--#else(adv.status==1)--><div class="btn btn-primary">未回复</div>
+								<!--#else(adv.status==2)-->已回复
+								<!--#else-->已删除
+								<!--#end-->
+							</td>
+						</tr>
+						<!--#end-->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+		(function ($) {
+			'use strict';
+
+		})(jQuery);
+	</script>
+</body>
+</html>

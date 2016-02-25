@@ -1,0 +1,304 @@
+<!--#set(BalanceModel balance)-->
+<!--#set(OrderItemModel orderItem)-->
+<!--#set(OrderDetailModel orderDetail)-->
+<!--#set(List<Advice> advices)-->
+<!--#set(Advice advice)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+			</h1>
+		</section>
+		<!-- Main content -->
+		<section class="content balanceDetail" >
+			<div class="box box-primary">
+				<div class="box-header with-border col-xs-12" style="background-color: #fff">
+					<div class="col-md-1"></div>
+					<div class="col-md-10 balanceDetail_body">
+						<div class="col-md-12" style="text-align: center;font-weight: bold;font-size: 20px;margin-top: 20px">胎心监护服务明细清单表</div>
+						<div style="text-align: left;margin-left: 15px;font-size: 14px;font-weight: bold">服务订单号：	${NumberFormat(balance.service.serviceNumber)}</div>
+						<div style="text-align: right;margin-right: 15px;font-size: 14px;font-weight: bold;margin-top: -20px">服务开通日期：	${balance.service.beginTime}</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							姓名：${balance.user.name}
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							年龄：${balance.age}岁
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							手机号：${balance.user.mobile}
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							预产期：	${balance.user.deliveryTime.format("yyyy-MM-dd")}
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							产检号：	${balance.service.caseNumber}
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							设备号：	${balance.service.serialnum}
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							咨询情况：	${balance.service.usedCount}/<!--#if(balance.service.totalCount=='-1')-->不限次<!--#else-->${balance.service.totalCount}<!--#end-->
+						</div>
+						<div class="col-md-3 col-xs-3" style="margin-top: 7px;">
+							到期时间：	${balance.service.endTime.format("yyyy-MM-dd")}
+						</div>
+						<div class="col-xs-12"></div>
+						<div class="table-responsive col-md-12">
+							<div style="text-align: center;font-size: 20px;padding-top: 25px;margin-bottom: 10px;font-weight: bold">预付明细</div>
+							<table class="table table-hover table-striped">
+								<thead>
+									<tr class="info">
+
+										<th class="mailbox-name">项目</th>
+										<th class="mailbox-name">数量</th>
+										<th class="mailbox-name">单价</th>
+										<th class="mailbox-name">金额</th>
+									</tr>
+								</thead>
+								<tbody>
+								<!--#for(orderDetail: balance.orderDetailModels)-->
+								<!--#if(orderDetail.orderType==0||orderDetail.orderType==1)-->
+								<input type="hidden" value="${orderDetail.id}" id="RorderId">
+								<!--#end-->
+								<tr>
+									<td><span style="color: #c51e04;font-size: 18px">订单号: &nbsp; ${orderDetail.id}</span></td>
+									<td colspan="3" align="right"><span style=";color: #c51e04;font-size: 18px;text-align: right;padding-right: 40px">下单时间: &nbsp;&nbsp;&nbsp;${orderDetail.createTime}</span></td>
+								</tr>
+								 <!--#for(orderItem: orderDetail.orderItems)-->
+									<tr>
+										<td>${orderItem.productName}<!--#if(orderItem.productType==3)--><!--#if(orderItem.chargeType==1)-->(医院收取)<!--#else-->(代收)<!--#end--><!--#end--></td>
+										<td>${orderItem.amount}</td>
+										<td>${getAccountantMoney(orderItem.price)}</td>
+										<td>${getAccountantMoney(orderItem.price*orderItem.amount)}</td>
+									</tr>
+									<!--#end-->
+									<tr>
+									<td colspan="4" style="font-weight: bold;font-size: 16px;text-align: right;padding-right: 92px">订单金额 : ${getAccountantMoney(orderDetail.orderFee)}</td>
+									</tr>
+									<!--#end-->
+									<tr>
+									<td colspan="4" style="font-weight: bold;font-size: 16px;text-align: right;padding-right: 50px">服务总预付金额 : ${getAccountantMoney(balance.prePayTotal)}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="table-responsive col-md-12">
+							<div style="text-align: center;font-size:20px;padding-top: 30px;margin-bottom: 20px;font-weight: bold">应收明细</div>
+							<table class="table table-hover table-striped">
+								<thead>
+									<tr class="info">
+										<th class="mailbox-name">项目</th>
+										<th class="mailbox-name">应收</th>
+										<th class="mailbox-name">备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--#if(balance.askChargeType != 1)-->
+									<tr>
+										<td>咨询费(代收)</td>
+										<td>${getAccountantMoney(balance.realAskTotal)}</td>
+										<td>${balance.realAskCount}次咨询</td>
+									</tr>
+									<!--#end-->
+									<tr>
+										<td>使用费</td>
+										<td>${getAccountantMoney(balance.realRentTotal)}</td>
+										<td>${balance.realRentCount}天</td>
+									</tr>
+									<tr>
+										<td>耦合剂</td>
+										<td>${getAccountantMoney(balance.realCouplingTotal)}</td>
+										<td>${balance.realCoupling}盒</td>
+									</tr>
+									<tr>
+										<td colspan="3" style="font-weight: bold;font-size: 16px;padding-right: 90px;text-align:right;">应收合计：${getAccountantMoney(balance.realTotal)}</td>
+									</tr>
+									<tr>
+										<td colspan="3" style="font-weight: bold;font-size: 16px;padding-right: 90px;text-align:right;">应退合计：${getAccountantMoney(balance.refundTotal)}</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--#if(balance.askChargeType == 1)-->
+							<div style="text-align: center;font-size: 20px;padding-top: 30px;margin-bottom: 20px;font-weight: bold">医院应收</div>
+							<table class="table table-hover table-striped">
+								<thead>
+									<tr class="info">
+										<th class="mailbox-name">项目</th>
+										<th class="mailbox-name">应收</th>
+										<th class="mailbox-name">备注</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr>
+										<td>咨询费(院收)</td>
+										<td>${getAccountantMoney(balance.realAskTotal)}</td>
+										<td>${getAccountantMoney(balance.realAskCount)}次咨询</td>
+									</tr>
+
+
+									<tr>
+										<td colspan="3" style="font-weight: bold;font-size: 16px;padding-right: 90px;text-align:right;">应收合计：${getAccountantMoney(balance.realAskTotal)}</td>
+									</tr>
+
+								</tbody>
+							</table>
+							<!--#end-->
+						</div>
+						<div class="table-responsive col-md-12">
+							<div style="text-align: center;font-size: 20px;padding-top: 30px;margin-bottom: 20px;font-weight: bold">咨询明细</div>
+							<table class="table table-hover table-striped">
+								<thead>
+								<tr class="info">
+									<th class="mailbox-name">监护日期</th>
+									<th class="mailbox-name">监护孕周</th>
+									<th class="mailbox-name">监护时长</th>
+									<th class="mailbox-name">咨询日期</th>
+									<th class="mailbox-name">回复日期</th>
+									<th class="mailbox-name">回复人</th>
+								</tr>
+								</thead>
+								<tbody>
+								<!--#for(advice : advices)-->
+								<tr>
+									<td>${advice.testTime}</td>
+									<td>${advice.gestationalWeeks}</td>
+									<td>${advice.testTimeLong}</td>
+									<td>${advice.askTime}</td>
+									<td>${advice.replyTime}</td>
+									<td>${advice.doctorName}</td>
+								</tr>
+								<!--#end-->
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-12 col-xs-12">
+							<div class="collapse" id="collapseExample">
+								<div class="box box-warning box-solid">
+									<div class="box-header with-border">
+										<h3 class="box-title">申请理由</h3>
+									</div>
+									<div class="box-body">
+										<div class="well">
+											<textarea class="form-control" id="applyReason"></textarea>
+										</div>
+										<button class="btn btn-success pull-right" id="applyRefund">提交</button>
+									</div>
+								</div>
+							</div>
+						</div>
+				    </div>
+			   		<div class="col-md-1"></div>
+					<div class="col-md-12 col-xs-12" style="text-align: center" >
+						<!--#if(balance.service.serviceStatus == 2)-->
+						<div class="btn btn-primary" id="balanceSubmit">
+							结算
+						</div>
+						<div class="btn btn-primary" id="doPrint">
+							打印明细清单
+						</div>
+
+						<!--#end-->
+						<!--#if(balance.service.serviceStatus == 3)-->
+						<button class="btn btn-primary" id="showApply">
+							申请退款
+						</button>
+						<!--#end-->
+					</div>
+
+		    	</div>
+			</div>
+		</section>
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+		(function ($) {
+			'use strict';
+
+			$("#doPrint").click(function() {
+				alert("您好，建议您横向打印明细清单！")
+				$(".balanceDetail_body").printThis()
+			})
+
+			var page=$(".balanceDetail");
+			page.find("#balanceSubmit").click(function(){
+				var serviceId ='${balance.service.id}';
+				var params={
+					serviceId:serviceId
+				};
+				$.ajax({
+					url: "service/balanceService.do",
+					data: params,
+					type: 'post',
+					dataType: "json ",
+					cache: false,
+					error: function (textStatus, errorThrown) {
+					},
+					success: function (data) {
+						if (data.status == 0) {
+							index.loadContent("service/balanceDetail.do?id="+serviceId);
+							$.alert("结算成功");
+						}
+					}
+				});
+			});
+			page.find("#applyRefund").click(function(){
+                 var applyReason = $("#applyReason").val();
+				 if(applyReason == ""){
+					 $.alert("申请理由不能为空");
+					 return false;
+				 }
+				 var serviceId='${balance.service.id}';
+				 var orderId=$("#RorderId").val();
+				 var name='${balance.user.name}';
+				 var mobile='${balance.user.mobile}';
+				 var hospitalId='${balance.hospitalDO.id}';
+				 var hospitalName='${balance.hospitalDO.name}';
+				 var payType='${orderDetail.payType}';
+				 var applyAmount='${balance.refundTotal}';
+				 var payAmount='${balance.prePayTotal}';
+				 var params={
+					 serviceId:serviceId,
+					 orderId:orderId,
+					 name:name,
+					 mobile:mobile,
+					 hospitalId:hospitalId,
+					 hospitalName:hospitalName,
+					 status:0,
+					 payType:payType,
+					 applyAmount:applyAmount,
+					 applyReason:applyReason,
+					 payAmount:payAmount
+				};
+				$.ajax({
+					url: "refund/newRefundApply.do",
+					data: params,
+					type: 'post',
+					dataType: "json ",
+					cache: false,
+					error: function (textStatus, errorThrown) {
+					},
+					success: function (data) {
+						if (data.status == 0) {
+							index.loadContent("service/balanceDetail.do?id="+serviceId);
+							$.alert("申请成功");
+						}
+					}
+				});
+ 			});
+			page.find("#showApply").click(function(){
+				$(".collapse").collapse('toggle');
+				$('html,body').animate({scrollTop: $('#collapseExample').offset().top},1000);
+			});
+		})(jQuery);
+
+	</script>
+</body>
+</html>

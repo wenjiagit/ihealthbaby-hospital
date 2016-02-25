@@ -1,0 +1,478 @@
+<!--#set(OrderDetailModel model)-->
+<!--#set(OrderItemModel orderitem)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<body>
+<head>
+	${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<div class="content-wrapper-inner sysUserList">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+		</h1>
+	</section>
+	<!-- Main content -->
+	<section class="content orderDetail" >
+		<div class="box box-primary">
+			<div class="box-header with-border col-xs-12" style="background-color: #fff">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="col-md-12" style="text-align: center;font-weight: bold;font-size: 25px;margin-top: 20px">订单详情</div>
+					<div class="col-md-4 col-xs-6"  style="font-size: 18px;font-weight: bold">订单号：${model.id}</div>
+					<div class="col-md-4" style="font-size: 18px;font-weight: bold">合同号：${model.contractNum}</div>
+					<div class="col-md-4 col-xs-6"  style="font-size: 18px;font-weight: bold">下单时间: ${model.createTime}</div>
+					<div class="col-md-4 col-xs-6" style="font-size: 18px;margin-top: 10px">
+						收货人：${model.userDO.name}
+					</div>
+					<div class="col-md-4 col-xs-6" style="font-size: 18px;margin-top: 10px">
+						订单类型：<!--#if(model.orderType==0||model.orderType==2)-->APP订单<!--#else-->WEB订单<!--#end-->
+					</div>
+
+					<div class="col-md-4 col-xs-6" style="font-size: 18px;margin-top: 10px">
+						配送方式：<!--#if(model.deliverType==0)-->到院自提<!--#else-->邮寄<!--#end-->
+					</div>
+
+					<div class="table-responsive col-md-12 col-xs-12" style="margin-top: 10px">
+						<div class="box box-primary box-solid ">
+							<div class="box-header with-border">
+								<h5 class="box-title">订单明细</h5>
+							</div>
+							<div class="box-body">
+								<table class="table table-hover table-striped">
+									<thead>
+									<tr class="info">
+										<th class="mailbox-name">项目</th>
+										<th class="mailbox-name">数量</th>
+										<th class="mailbox-name">单价</th>
+										<th class="mailbox-name">金额</th>
+									</tr>
+									</thead>
+									<tbody>
+									<!--#for(orderitem : model.orderItems)-->
+									<tr>
+										<td>${orderitem.productName}<!--#if(orderitem.productType==3)--><!--#if(orderitem.chargeType==1)-->(医院收取)<!--#else-->(代收)<!--#end--><!--#end--></td>
+										<td>${orderitem.amount}</td>
+										<td>${getAccountantMoney(orderitem.price)}</td>
+										<!--#set(itemprice=orderitem.price*orderitem.amount)-->
+										<td>${getAccountantMoney(itemprice)}</td>
+									</tr>
+									<!--#end-->
+									<tr>
+										<td colspan="4"  style="font-weight: bold;font-size: 18px;color: red;text-align: right">预收合计：${getAccountantMoney(model.orderFee)}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--</div>
+                                    </div>-->
+							<!--#if(model.addressDO != null)-->
+							<!--<div class="col-md-12">
+
+                                <div class="box box-success box-solid">-->
+							<div class="box-header" >
+								<h5 class="box-title">收货地址</h5>
+							</div>
+							<div class="box-body">
+								<div class="col-md-6 col-xs-6" style="margin-top: 15px;">
+									所在地区：${model.addressDO.area}
+								</div>
+								<div class="col-md-6 col-xs-6" style="margin-top: 15px;">
+									详细地址：${model.addressDO.address}
+								</div>
+								<div class="col-md-6 col-xs-6" style="margin-top: 15px;">
+									收货人：${model.addressDO.linkMan}
+								</div>
+								<div class="col-md-6 col-xs-6" style="margin-top: 15px;">
+									联系电话：${model.addressDO.mobile}
+								</div>
+							</div>
+							<!--#end-->
+						</div>
+					</div>
+
+
+					<!--#if(model.orderStatus==0)-->
+
+					<div class="col-md-12 col-xs-12" id="payDiv">
+						<div class="callout callout-danger" style="padding: 4px">
+							<h4 style="margin-top:11px">尚未支付</h4>
+						</div>
+						<div class="col-md-2 col-xs-4"  style="padding: 0">
+						<button class="btn btn-primary" id="cashPay">
+							POS机支付
+						</button>
+						</div>
+						<!--<div class="col-md-2 col-xs-4"  style="padding: 0">
+							<button class="btn btn-primary" id="appPay">
+								线上付款
+							</button>
+						</div>-->
+						<div class="col-md-2 col-xs-4" style="padding: 0">
+							<button class="btn btn-primary" id="code_payment">
+								扫码支付
+							</button>
+						</div>
+						<div class="col-md-2 col-xs-4"  style="padding: 0">
+							<button class="btn btn-warning" id="cancelPay">
+								取消订单
+							</button>
+						</div>
+					</div>
+
+					<!--#else(model.orderStatus==1)-->
+					<div class="col-md-12 col-xs-12" id="deliverdiv">
+						<div class="callout callout-success">
+							<h4>支付完成，请发货</h4>
+						</div>
+
+
+
+						<div class="box box-info">
+							<div class="box-body">
+								<!--#if(model.orderType==0)-->
+								<div class="row">
+									<div class="col-md-5 col-xs-6" style="margin-top: 15px;">
+										<div class="input-group">
+											<span class="input-group-addon" >设备编号：</span><input type="text" class="form-control" id="serialnum" value="${model.serviceDO.serialnum}">
+										</div>
+									</div>
+									<div class="col-md-2 col-xs-6" style="margin-top: 15px;">
+										<button class="btn btn-primary " id="bindSN">
+											绑定设备编号
+										</button>
+									</div>
+								</div>
+								<!--#end-->
+								<!--#if(model.deliverType==1)-->
+
+								</div>
+								<div class="row">
+									<div class="col-md-5 col-xs-6" style="margin-top: 15px;">
+										<div class="input-group">
+											<span class="input-group-addon">快递单号：</span><input class="form-control" id="expressNO" placeholder="快递单号">
+										</div>
+									</div>
+									<div class="col-md-5 col-xs-6" style="margin-top: 15px;">
+										<div class="input-group">
+											<span class="input-group-addon">快递公司：</span><input class="form-control" id="expressCom" placeholder="快递公司">
+										</div>
+									</div>
+									<!--#end-->
+									<div class="col-md-2 col-xs-6 pull-right" style="margin-top: 15px;">
+										<button class="btn btn-primary " id="confirmTrade">
+											确认发货
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<!--#else(model.orderStatus==2 )-->
+					<div class="col-md-12 col-xs-12" >
+						<div class="callout callout-warning">
+							<h4>已发货</h4>
+						</div>
+					</div>
+					<!--#else( model.orderStatus==3)-->
+					<div class="col-md-12 col-xs-12" >
+						<div class="callout callout-danger" style="padding: 8px">
+							<h4 style="margin-top:10px">订单完成</h4>
+						</div>
+					</div>
+				<!--#else( model.orderStatus==4)-->
+				<div class="col-md-12 col-xs-12" >
+					<div class="callout callout-warning" style="padding: 8px">
+						<h4 style="margin-top:10px">订单已取消</h4>
+					</div>
+				</div>
+				<!--#end-->
+				</div>
+				<div class="col-md-12 col-xs-12">
+					<div class="col-md-6 col-xs-6" style="margin-top: 15px;">
+						<button class="btn btn-primary pull-right" id="backtolist">
+							返回列表
+						</button>
+					</div>
+				</div>
+			</div>
+			<div style="display: none">
+				<img src="./img/weixin.jpg" id="img-buffer-weixin">
+				<img src="./img/zhifubao.jpg" id="img-buffer-ali">
+			</div>
+	</section>
+	<!-- /.content -->
+</div>
+<!-- ./wrapper -->
+${include('/commons/foot.httl')}
+<script>
+	(function ($) {
+		'use strict';
+		function toUtf8(str) {
+			var out, i, len, c;
+			out = "";
+			len = str.length;
+			for(i = 0; i < len; i++) {
+				c = str.charCodeAt(i);
+				if ((c >= 0x0001) && (c <= 0x007F)) {
+					out += str.charAt(i);
+				} else if (c > 0x07FF) {
+					out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+					out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));
+					out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+				} else {
+					out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));
+					out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+				}
+			}
+			return out;
+		}
+		var ratio = (window.devicePixelRatio || 1);
+		$("#code_payment").click(function(){
+			var orderId = '${model.id}';
+			var params = {
+				orderId: orderId
+			};
+			$.dialog({
+				type : "confirm",
+				title : "扫码支付",
+				content:
+				'<div style="width: 100%;margin-top: 30px" id="dialogDiv">'+
+					'<div class="micro_channel_pay" id="micro_dimensional_code" style="display: inline-block;text-align: center;width: 50%">'+
+					'</div>'+
+					'<div class="alipay_payment" id="alipay_dimensional_code" style="display: inline-block;text-align: center;width: 50%">'+
+					'</div>'+
+				'</div>',
+				size:"modal-lg",
+				sureCallBack:function (){
+					index.loadContent("/order/"+orderId+"/orderDetail.do");
+				},
+				sureText:"支付完成"
+			});
+			var dialogLoading=$("#dialogDiv");
+			dialogLoading.startLoading();
+			$.ajax({
+				url: "order/orderQr.do",
+				data: params,
+				type: 'post',
+				dataType: "json ",
+				cache: false,
+				error: function (textStatus, errorThrown) {
+				},
+				success: function (data) {
+					dialogLoading.stopLoading();
+					if (data.status == 0) {
+						var micro_dimensional_code ;
+						var alipay_dimensional_code;
+						if(data.data != null){
+							micro_dimensional_code=data.data[0];
+							alipay_dimensional_code=data.data[1]
+							var ali=$("#img-buffer-ali")[0];
+							var weixin=$("#img-buffer-weixin")[0];
+							$('#micro_dimensional_code').qrcode({
+								render: "canvas",//设置渲染方式
+								image: weixin,
+								imagesize: 20* 0.01,
+								radius: 0.2,
+								quiet: 1,
+								mode:4,
+								ecLevel: "H",
+								size:280,
+								text:micro_dimensional_code
+							});
+							$('#alipay_dimensional_code').qrcode({
+								render: "canvas",//设置渲染方式
+								image: ali,
+								imagesize: 20* 0.01,
+								radius: 0.2,
+								quiet: 1,
+								mode:4,
+								ecLevel: "H",
+								size:280,
+								text:alipay_dimensional_code
+							});
+						}
+
+					}
+				}
+			});
+		});
+
+		var page =$(".orderDetail");
+		page.find("#cashPay").click(function() {
+			var options={
+				type:"confirm",
+				title:"友情提示",
+				content:"请输入POS签购单上的参考号后六位：<input type='text' id='posNo' class='form-control'>",
+				sureCallBack:callback,
+				showAnimate:true,
+				size:"",
+				backdrop:true
+			};
+			$.dialog(options);
+		});
+		var callback=function(){
+			var orderId = '${model.id}';
+			var posNo=$("#posNo").val();
+			if(posNo==''){
+				$.alert("请输入POS签购单上的参考号后六位");
+				return true;
+			}
+			var params = {
+				orderId: orderId,
+				tradeNo:posNo
+			};
+			$.ajax({
+				url: "order/orderPay.do",
+				data: params,
+				type: 'post',
+				dataType: "json ",
+				cache: false,
+				error: function (textStatus, errorThrown) {
+				},
+				success: function (data) {
+					if (data.status == 0) {
+						index.loadContent("/order/"+orderId+"/orderDetail.do");
+					}
+				}
+			});
+		}
+		page.find("#appPay").click(function(){
+			var orderId = '${model.id}';
+			index.loadContent("/order/"+orderId+"/orderDetail.do");
+		});
+		page.find("#confirmTrade").click(function(){
+
+			var orderId = '${model.id}';
+			var serialnum =$("#serialnum").val();
+			if(serialnum ==""){
+				$.alert("设备编号为空");
+				return;
+			}
+			var expressCom = $("#expressCom").val();
+			var expressNo = $("#expressNo").val();
+			var content="确定要完成发货吗？";
+			if (expressCom == "" || expressNo == "") {
+				content="发现快递单号或快递公司填写不完整,确认强制提交吗？"
+			}
+
+			var options={
+				type:"confirm",
+				title:"友情提示",
+				content:content,
+				sureCallBack:fahuo,
+				showAnimate:true,
+				size:"",
+				backdrop:true
+			};
+			$.dialog(options);
+		});
+		var fahuo=function() {
+			var orderId = '${model.id}';
+			var expressCom = $("#expressCom").val();
+			var expressNo = $("#expressNo").val();
+			var params = {
+				orderId: orderId,
+				expressCom: expressCom,
+				expressNo: expressNo,
+				deliverType:"${model.deliverType}"
+			};
+			page.startLoading();
+			$.ajax({
+				url: "order/confirmDelivery.do",
+				data: params,
+				type: 'post',
+				dataType: "json ",
+				cache: false,
+				error: function (textStatus, errorThrown) {
+				},
+				success: function (data) {
+					page.stopLoading();
+					if (data.status == 0) {
+						if(data.data==0){
+							index.loadContent("/order/" + orderId + "/orderDetail.do");
+						}else{
+							$.alert("服务尚未绑定设备!")
+						}
+					}
+				}
+			});
+		}
+		page.find("#backtolist").click(function () {
+			index.loadContent("/order/orderList.do");
+		});
+
+		page.find("#bindSN").click(function(){
+			var serialnum =$("#serialnum").val();
+			if(serialnum==""){
+				$.alert("设备编号为空!");
+				return;
+			}
+			var params={
+				id :'${model.id}',
+				serialnum:serialnum
+			};
+			$.ajax({
+				url: "order/addSN.do",
+				data: params,
+				type: 'post',
+				dataType: "json ",
+				cache: false,
+				error: function (textStatus, errorThrown) {
+				},
+				success: function (data) {
+					page.stopLoading();
+					if (data.status == 0) {
+						if(data.data==0){
+								$.alert("绑定成功");
+								//index.loadContent("/order/" + orderId + "/orderDetail.do");
+						}
+					}else{
+						$.alert(data.msg);
+					}
+				}
+			});
+		});
+
+		page.find("#cancelPay").click(function(){
+			var options={
+				type:"confirm",
+				title:"友情提示",
+				content:'确认要取消订单吗？',
+				sureCallBack:cancelOrder,
+				showAnimate:true,
+				size:"",
+				backdrop:true
+			};
+			$.dialog(options);
+		});
+
+		var cancelOrder = function(){
+			$.ajax({
+				url: "order/orderCancel.do",
+				data: {orderId:'${model.id}'},
+				type: 'post',
+				dataType: "json ",
+				cache: false,
+				error: function (textStatus, errorThrown) {
+				},
+				success: function (data) {
+					page.stopLoading();
+					if (data.status == 0) {
+						index.loadContent("/order/${model.id}/orderDetail.do");
+					}
+				}
+			});
+		}
+		$("#serialnum").keyup(function(){
+			var serialnum = $('#serialnum').val();
+			$('#serialnum').val(serialnum.toUpperCase());
+		});
+	})(jQuery);
+
+</script>
+</body>
+</html>

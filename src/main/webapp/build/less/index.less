@@ -1,0 +1,392 @@
+@import "../plugins/bootstrap-3.3.5/less/mixins.less";
+@import "../plugins/bootstrap-3.3.5/less/variables.less";
+@import "../plugins/AdminLTE-2.1.1/build/less/variables.less";
+@import "main.less";
+@import "permSet.less";
+
+table tr td{
+  vertical-align: middle !important;
+}
+
+.content-wrapper {
+  position: relative;
+}
+.content-wrapper-inner {
+  background-color: @body-bg;
+  position: relative;
+}
+.modal-dialog .modal-body{
+  overflow: auto;
+}
+.dialog-footer-buttons{
+  text-align: center;
+}
+
+
+.bootstrap-switch{
+  border-radius: 12px;
+}
+
+
+//整个左道航的背景颜色
+.skin-blue .sidebar a{
+  font-size: 14px;
+  color:#000;
+}
+.sidebar-menu>li{
+  position: relative;
+  margin: 0px;
+  padding: 0;
+}
+.skin-blue .sidebar-menu>li>.treeview-menu {
+  background: #fff; color: #000;
+}
+//点击下箭头后 的背景
+.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a{
+  background: #fff; color:#3498DB;
+}
+//单个li的背景和字体
+.skin-blue .treeview-menu>li>a{
+  color: #8aa4af;
+  padding-left:30px;
+}
+//鼠标经过时的字体颜色和背景  style="margin-left: -6px;border-top: 1px solid #E5E4E5;border-right: 1px solid #E5E4E5;"
+
+@media (min-width: 768px){
+  .sidebar-mini.sidebar-collapse .sidebar-menu>li>.treeview-menu{
+    padding-top: 0;
+    padding-bottom:0;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+  background-color: #fff;color:#000;
+}
+
+//左侧蓝色条
+.skin-blue .sidebar-menu>li>a{
+  border-left: 3px solid transparent;
+  border-top: 1px solid #E5E5E5;
+}
+.sidebar-collapse.skin-blue .treeview-menu>li:hover>a, .skin-blue .treeview-menu>li.active>a{
+  border-left-color: #3c8dbc;
+  border-top:none
+}
+.sidebar-collapse.skin-blue .treeview-menu>li>a,{
+  border-left: 3px solid transparent;
+  border-top:none;
+  padding-left: 20px;
+}
+.sidebar-menu .treeview-menu>li{
+  background-color: #f2f3f5;
+  height: 44px;
+  margin-left: -5px;
+  padding-top: 8px;
+  border-top:1px solid #E5E5E5;
+  position: relative;left: 1px;
+}
+.sidebar-collapse.skin-blue .sidebar-menu .treeview-menu>li{
+  border-top:none;
+  height: 44px;
+}
+.sidebar-menu .treeview-menu>li>a:hover{
+  background-color: #F2F3F5;
+  color:#3c8dbc
+}
+
+.skin-blue .treeview-menu>li.active>a, .skin-blue .treeview-menu>li>a:hover{
+  color:#3c8dbc
+}
+.skin-blue .sidebar-menu>li.active>a .fa,.skin-blue .treeview-menu>li.active>a .fa,{
+  color:#3c8dbc
+}
+
+  //头部分
+.main-header>.navbar{
+  height: 58px;
+}
+.main-header .logo{
+  height: 58px;
+  line-height: 58px;
+}
+.main-header .sidebar-toggle{
+  padding: 18px 18px;
+  border: 1px solid #5fc67a;
+}
+@media (min-width: 768px){
+  .navbar-nav>li>a {
+    padding-top: 21px;
+    padding-bottom: 15px;
+  }
+}
+//中间部分
+@bg_color:#5ECA7F;
+.skin-blue .main-header .navbar{
+ background-color: #65D88B;
+}
+//左边部分
+.skin-blue .main-header .logo{
+  background-color: @bg_color;
+}
+.skin-blue .main-header .logo:hover{
+  background-color:@bg_color;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+  background-color: @bg_color;
+  border: 1px solid #5fc67a;
+}
+
+//蓝色按钮修改
+.btn-primary {
+  background-color: #67B5EB;
+  border-color: #67B5EB;
+  &:hover{
+    background-color: #62a8dc;
+    border-color: #62a8dc;
+  }
+}
+//绿色按钮修改
+.btn-success{
+  background-color:#65d88b;
+  border-color: #65d88b;
+  &:hover{
+    background-color:#5ECA7F;
+    border-color:#5ECA7F;
+  }
+}
+
+//上一页下一页当前第几页颜色
+.pagination>.disabled>a{
+    color:#fff;
+    background-color: #3498DB;
+}
+//翻页字体颜色
+.pagination>li>a{
+    color:#3498DB;
+    background: #fff;
+}
+
+//刷新按钮
+.btn-default{
+  &:hover {
+    border-color: #99C9EA;
+    color: #99C9EA;
+  }
+}
+#refresh i {
+   &:hover {
+     border-color: #99C9EA;
+     color: #99C9EA;
+   }
+ }
+
+//关于表单的样式
+.box_margin{
+  margin-top: 20px;
+}
+.table>thead>tr.info>th{
+  background-color: #fff;
+  color:#B4B4B4;
+}
+
+.table-striped>tbody>tr:nth-of-type(even){
+  background-color: #fff;
+  &:hover{
+    background-color: #e9e9e9;
+  }
+}
+.table-striped>tbody>tr:nth-of-type(odd){
+  &:hover{
+    background-color: #e9e9e9;
+  }
+}
+.table_height{
+  tr{
+    height: 60px;
+  }
+  .table_th_sty{
+    line-height: 37px;
+  }
+}
+
+.pagination-sm>li>a{
+  padding: 6px 14px;
+  font-size: 14px;
+}
+//登录样式
+
+.login-logo, .register-logo{
+  text-align:left;
+  margin-top: 45px;
+  margin-left: 15% ;
+}
+.login-page, .register-page {
+   background: #EDEDED;
+ }
+.login-box-body, .register-box-body{
+  border-radius: 10px;
+  border: 1px solid #d4d4d4;
+}
+.login-box, .register-box{
+  width: 400px;
+  margin:3% auto;
+}
+@media(max-width: 320px){
+  .login-box{
+    width: 300px;
+  }
+  .login-logo{
+    font-size: 24px;
+  }
+  .main-footer{
+    display: none;
+  }
+}
+@media(max-width: 375px){
+  .login-box{
+    width: 300px;
+  }
+  .login-logo{
+    font-size: 24px;
+  }
+  .main-footer{
+      display: none;
+    }
+}
+.login-box-body{
+  box-shadow: 0 43px 52px #CCD;
+}
+//登录input样式
+.has-feedback .form-control{
+  height: 45px;
+  font-size: 14px;
+  padding-left: 50px;
+}
+.form-control-feedback{
+  line-height: 45px;
+  position: relative;
+  top:57px;
+  left:0;
+  font-size: 17px;
+}
+.login-box-body .form-control-feedback,{
+  //color:#3B9CFD;
+}
+.input:-webkit-autofill{
+  background-color:red
+}
+.btn-login{
+  height: 50px;
+  border-radius: 40px;
+  box-shadow:0 2px 52px #67b5eb;
+  font-size: 16px
+}
+.forgot_btn{
+  margin-top: -10px;
+  padding-right: 20px;
+  text-align: right
+}
+.login_img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  margin:20px 0 30px 35%
+}
+
+.login_input{
+  border: none;
+  border-bottom:2px solid #A8D1FA;
+  background-color: #F8F8F8;
+}
+.has-feedback{
+  position: relative;
+  top: -24px
+}
+.glyphicon{
+  position: relative;
+  left: 10px;
+  top:28px
+}
+.img-circle,.img-circle-min{
+  margin-left: 32%;
+  text-align: center;
+  margin-top: 30px;
+  width: 70px;
+  height: 70px;
+}
+.sidebar-collapse .img-circle{
+  width: 40px;
+  height: 40px;
+  margin-left: 4px
+}
+.user_name,.user_name_min{
+  text-align:center;
+  margin: 20px 0 0 -12px;
+  font-size: 18px;
+  color: #636363
+}
+.sidebar-collapse .user_name{
+  font-size: 12px;
+  margin-left: 0;
+  margin-top: 15px;
+}
+.sidebar-collapse .hospital_name{
+  display: none;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 1%;
+  left: 230px;
+  min-width: 217px
+}
+.sidebar-collapse .dropdown_min{
+  margin-left: -180px;
+}
+
+.hospital_name_min{
+  display:block;
+}
+
+//内容部分 主要是表格的
+.content{
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.content-header{
+  padding: 27px 30px 0 30px;
+}
+.box{
+  position: relative;
+  border-radius: 0;
+  background: #ffffff;
+  border-top: none;
+  margin-bottom: 20px;
+  width: 100%;
+  box-shadow:none;
+}
+.box_margin{
+  margin-top: -8px;
+}
+.box-header{
+  padding: 10px 0 10px 18px;
+}
+.box-footer{
+  padding: 10px 0 10px 18px;
+}
+.pageinfo{
+  padding-right: 39px;
+  margin-top: 11px;
+}
+
+//头部tooggle的大小
+.main-header .sidebar-toggle{
+  padding: 12px 25px;
+  font-size: 23px;
+}
+
+//头部开关颜色
+.bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-warning{
+  background-color: #3498DB;
+}
+

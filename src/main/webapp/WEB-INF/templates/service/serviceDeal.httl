@@ -1,0 +1,585 @@
+<!--#set(HospitalPackageModel model)-->
+<!--#set(ProductDO product)-->
+<!--#set(List<HospitalFetalheartDO> snList)-->
+<!--#set(HospitalFetalheartDO sn)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('outsideService.serviceDeal')} <small>外租详情</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content hospitalList">
+			<div class="box box-primary">
+				<div class="box-header">
+				</div>
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages col-sm-10">
+						<form id="serviceForm" action="/service/dealService.do" method="post">
+							<div class="box-header">
+								<h5 class="box-title text-light-blue" style="margin-left: -10px">孕妇信息</h5>
+							</div>
+							<div class="box-body">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label style="margin-top: -15px">就诊卡号:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;"></span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input class="form-control"  type="text" id="caseNumber" name="caseNumber" placeholder="就诊卡号">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label style="margin-top:-30px">手机号:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-fw fa-building"></i>
+												</div>
+												<input type="text" class="form-control serviceDeal"
+													   id="mobile"  name="mobile" placeholder="手机号" />
+											</div>
+											<i class="fa fa-close close_btn" style="position: relative;display:none;cursor:pointer;top:-27px;left: 95%;width:30px;z-index:1000;font-size:17px;color:#999"></i>
+											<!-- /.input group -->
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>孕妇姓名:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-fw fa-user"></i>
+												</div>
+												<input type="text" class="form-control"
+													   id="username"  name="username" placeholder="孕妇姓名" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>出生日期:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input class="datepicker form-control"  data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+													   type="text" id="birthday" name="birthday" placeholder="出生日期">
+
+											</div>
+											<!-- /.input group -->
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>预产期:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input class="datepicker form-control" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask
+													   type="text" id="deliveryTime" name="deliveryTime" placeholder="预产期">
+
+											</div>
+										</div>
+									</div>
+									<div style="clear: both"></div>
+									<div class="box-header">
+										<h5 class="box-title text-light-blue">监护信息</h5>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>科室:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-exchange"></i>
+												</div>
+												<select type="text" class="form-control" id="departmentId" name="departmentId">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>负责医生:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-user-md"></i>
+												</div>
+												<select name="doctorId" class="form-control" id="doctorId">
+
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>探头SN:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa  fa-laptop"></i>
+												</div>
+												<div id="sntype">
+													<input type="text" class="form-control" placeholder="设备编号" id="serialnum" name="serialnum">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="margin-left:0;">
+									<div class="box box-primary box-solid">
+										<div class="box-header with-border">
+											<h3 class="box-title">套餐</h3>
+										</div>
+										<table class="table">
+											<tr class="active">
+												<th>项目名</th>
+												<th>价格</th>
+												<th>项目内所含</th>
+												<th>购买数量</th>
+											</tr>
+											<!--#for(product:model.forgift)-->
+											<tr class="info">
+												<td>${product.name}</td>
+												<td>${getAccountantMoney(product.price)}元</td>
+												<td>${product.innerAmount}台</td>
+												<td><label type="number">1</label>
+													<input type="hidden" value="1" id="Cforegift" name="Cforegift" />
+													<input type="hidden" value="${product.id}" id="Pforegift" name="Pforegift" />
+												</td>
+											</tr>
+											<!--#end-->
+											<tr class="success" id="dayRentTr">
+												<td width="20%">
+													<select class="form-control" id="dayRentSelect">
+														<!--#for(product:model.dayRent)-->
+														<option value="${product.id}" class="list_option">${product.name}</option>
+														<!--#end-->
+													</select>
+												</td>
+												<td id="dayPrice"></td>
+												<td id="dayAmount"></td>
+												<td><label type="number">1</label>
+													<input type="hidden" id="CdayRent" name="CdayRent" value="1" min="1" />
+													<input type="hidden"  id="PdayRent" name="PdayRent">
+
+												</td>
+											</tr>
+											<tr class="danger" id="askPrinceTr">
+
+													<td><select class="form-control" id="askPriceSelect">
+														<!--#for(product:model.askPrice)-->
+														<option value="${product.id}" class="list_option">${product.name}</option>
+														<!--#end-->
+													</select>
+													</td>
+												<td id="askPPrice"></td>
+												<td id="askPAmount"></td>
+												<td id="askAmountTd">
+												</td>
+											</tr>
+
+											<tr class="warning" id="couplantTr">
+												<td><select class="form-control" id="couplantSelect">
+													<!--#for(product:model.couplant)-->
+													<option value="${product.id}" class="list_option">${product.name}</option>
+													<!--#end-->
+												</select>
+												</td>
+												<td id="couplantPrice"></td>
+												<td id="couplantAmount"></td>
+												<td>
+													<input type="number" id="Ccouplant" name="Ccouplant" value="1" min="1" />
+													<input type="hidden"  id="Pcouplant" name="Pcouplant">
+												</td>
+
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" id="hospitalId" name="hospitalId" value="${model.id}">
+							<div class="dialog-footer-buttons">
+								<button class="btn btn-primary" style="margin:50px auto 50px auto" type="submit">开通监护</button>
+							</div>
+						</form>
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+
+		(function ($) {
+			'use strict';
+			$(".serviceDeal").blur(function(){
+				var serviceDeal=$(".serviceDeal").val();
+				if(serviceDeal!=''&&serviceDeal!=null){
+					if (!serviceDeal.match(/^1[3458]\d{9}$/)) {
+						alert("手机号码格式不正确！请重新输入");
+						$(".serviceDeal").val('').focus();
+					}
+				}
+			})
+			$("[data-mask]").inputmask();
+			$('.selectpicker').selectpicker();
+			function getOffsetDateByYear(offsetYear) {
+				var  date = new Date();
+				var  strYear  =  date.getFullYear()  + offsetYear;
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if(strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			//孕妇年龄段，用于更好的定制时间组件
+			var minAge = 15;//最小孕妇年龄
+			var maxAge = 60;//最大孕妇年龄
+			var aveAge = 15;//孕妇平均年龄
+			/*
+			 比如今年是2015年，那么孕妇年龄段为2015-60~2015-18 即：日期组件可选年份为：1955~1997 默认年份为2
+			 formatDate: 'Y-m-d',015-25 即：1990
+			 */
+			$('#birthday').datetimepicker({
+				todayButton:false,
+				scrollInput: false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart:(new Date().getFullYear())-maxAge,
+				yearEnd:(new Date().getFullYear())-minAge,
+				defaultDate: getOffsetDateByYear(-aveAge),//默认日期，当前向前推25年，因为孕妇生日大概集中在这个年龄段
+				minDate: getOffsetDateByYear(-maxAge),//默认日期向前推60年，孕妇一般不会超过60岁
+				maxDate: getOffsetDateByYear(-minAge),//默认日期向前推15年，孕妇一般不会小于15岁
+				timepicker: false
+			});
+
+			function getOffsetDateByDay(offsetDay) {
+				var  date = new Date();
+				date.setDate(date.getDate() + offsetDay);
+				var  strYear  =  date.getFullYear();
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if (strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			function getOffsetYear(offsetDay){
+				var dateStr = getOffsetDateByDay(offsetDay);
+				return dateStr.split('-')[0];
+			}
+			function getOffsetDateByDay(offsetDay) {
+				var  date = new Date();
+				date.setDate(date.getDate() + offsetDay);
+				var  strYear  =  date.getFullYear();
+				var  strDay  =  date.getDate();
+				var  strMonth  =  date.getMonth() + 1
+				if (strMonth < 10) {
+					strMonth = "0" + strMonth;
+				}
+				if (strDay < 10) {
+					strDay = "0" + strDay;
+				}
+				return  strYear + "-" + strMonth + "-" + strDay;
+			}
+			function getOffsetYear(offsetDay){
+				var dateStr = getOffsetDateByDay(offsetDay);
+				return dateStr.split('-')[0];
+			}
+			var preDay = 28; //预产期向前推的天数
+			var nextDay = 300;//预产期向后推的天数
+			$('#deliveryTime').datetimepicker({
+				scrollInput: false,
+				todayButton: false,
+				format: 'Y-m-d',
+				formatDate: 'Y-m-d',
+				yearStart: getOffsetYear(-preDay),
+				yearEnd: getOffsetYear(nextDay),
+				minDate: getOffsetDateByDay(-preDay),
+				maxDate: getOffsetDateByDay(nextDay),
+				timepicker: false
+			});
+			function formatCurrency(num) {
+				num = num.toString().replace(/\$|\,/g,'');
+				if(isNaN(num))
+					num = "0";
+				var sign = (num == (num = Math.abs(num)));
+				num = Math.floor(num*100+0.50000000001);
+				var cents = num%100;
+				num = Math.floor(num/100).toString();
+				if(cents<10)
+					cents = "0" + cents;
+				for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+					num = num.substring(0,num.length-(4*i+3))+','+
+							num.substring(num.length-(4*i+3));
+				return (((sign)?'':'-') + num + '.' + cents);
+			}
+			//初始化数据
+			var data = $!{toJson(model.dayRent)};
+			var askData=$!{toJson(model.askPrice)};
+			var couData=$!{toJson(model.couplant)};
+
+			if(couData.length!=0){
+				$("#couplantPrice").html(formatCurrency(couData[0].price/100)+"元");
+				var innerAmount;
+				if(couData[0].innerAmount==-1){
+					innerAmount="不限"
+				}else{
+					innerAmount=couData[0].innerAmount;
+				}
+				$("#couplantAmount").html(innerAmount+"盒");
+				$("#Ccouplant").attr("max",couData[0].maxAmount);
+				$("#Pcouplant").val(couData[0].id);
+			}else{
+				$("#couplantTr").remove();
+			}
+			$("#couplantSelect").change(function(){
+				var id= $("#couplantSelect").val();
+				$.each(couData,function(n,value){
+					if(id==value.id){
+						var innerAmount1;
+						if(value.innerAmount==-1){
+							innerAmount1="不限"
+						}else{
+							innerAmount1=value.innerAmount;
+						}
+
+						$("#couplantPrice").html(formatCurrency(value.price/100)+"元");
+						$("#couplantAmount").html(innerAmount1+"盒");
+						$("#Ccouplant").attr("max",value.maxAmount);
+						$("#Pcouplant").val(value.id);
+					}
+				});
+			});
+
+
+
+			if(data.length!=0){
+				$("#dayPrice").html(formatCurrency(data[0].price/100)+"元");
+				var innerAmount;
+			if(data[0].innerAmount==-1){
+				innerAmount="不限"
+			}else{
+				innerAmount=data[0].innerAmount;
+			}
+			$("#dayAmount").html(innerAmount+"天");
+			$("#CdayRent").attr("max",data[0].maxAmount);
+			$("#PdayRent").val(data[0].id);
+			}else{
+				$("#askPrinceTr").remove();
+			}
+         	$("#dayRentSelect").change(function(){
+				var id= $("#dayRentSelect").val();
+				$.each(data,function(n,value){
+                   if(id==value.id){
+					   var innerAmount1;
+					   if(value.innerAmount==-1){
+						   innerAmount1="不限"
+					   }else{
+						   innerAmount1=value.innerAmount;
+					   }
+
+					   $("#dayPrice").html(formatCurrency(value.price/100)+"元");
+					   $("#dayAmount").html(innerAmount1+"天");
+					   $("#CdayRent").attr("max",value.maxAmount);
+					   $("#PdayRent").val(value.id);
+				   }
+				});
+			});
+			if(askData.length!=0){
+				$("#askAmountTd").empty().html("<label type='number'>1</label><input type='hidden' id='Caskprice' name='Caskprice' value='1' min='1' /><input type='hidden'  id='Paskprice' name='Paskprice'>");
+				$("#askPPrice").html(formatCurrency(askData[0].price/100)+"元");
+				var innerAmount;
+				if(askData[0].innerAmount==-1){
+					innerAmount="不限"
+				}else{
+					innerAmount=askData[0].innerAmount;
+				}
+				$("#askPAmount").html(innerAmount+"次");
+				$("#Caskprice").attr("max",askData[0].maxAmount);
+				$("#Paskprice").val(askData[0].id);
+			}else{
+				$("#askPrinceTr").remove();
+			}
+			$("#askPriceSelect").change(function(){
+				var id= $("#askPriceSelect").val();
+				$.each(askData,function(n,value){
+					if(id==value.id){
+						var innerAmount1;
+						if(value.innerAmount==-1){
+							innerAmount1="不限";
+							$("#askAmountTd").empty().html("<label type='number'>1</label><input type='hidden' id='Caskprice' name='Caskprice' value='1' min='1' /><input type='hidden'  id='Paskprice' name='Paskprice'>");
+						}else{
+							innerAmount1=value.innerAmount;
+							if(value.innerAmount==1){
+								$("#askAmountTd").empty().html("<input type='number' id='Caskprice' name='Caskprice' value='1' min='1' /><input type='hidden'  id='Paskprice' name='Paskprice'>");
+							}else{
+								$("#askAmountTd").empty().html("<label type='number'>1</label><input type='hidden' id='Caskprice' name='Caskprice' value='1' min='1' /><input type='hidden'  id='Paskprice' name='Paskprice'>");
+							}
+						}
+
+						$("#askPPrice").html(formatCurrency(value.price/100)+"元");
+						$("#askPAmount").html(innerAmount1+"次");
+						$("#Caskprice").attr("max",value.maxAmount);
+						$("#Paskprice").val(value.id);
+					}
+				});
+			});
+			$(document).ready(function () {
+				$("#caseNumber").focus();
+			})
+			$(document).on('blur',"#mobile",function(){
+				if($("#mobile").val()!="") {
+					$.get("service/autoComplete.do", {mobile: $("#mobile").val()}, function (data) {
+						if (data.status == 0) {
+							var user = data.data;
+							if (user != null || user != user) {
+								$("input[name='mobile']").val(user.mobile).prop("readonly", "readonly");
+								$("input[name='username']").val(user.name).prop("readonly", "readonly");
+								$("input[name='birthday']").val(user.birthday.substr(0, 10)).datetimepicker('destroy').prop("readonly", "readonly");
+								$("input[name='deliveryTime']").val(user.deliveryTime.substr(0, 10)).datetimepicker('destroy').prop("readonly", "readonly");
+
+								if (user.caseNumber == '' || user.caseNumber == null) {
+									$("input[name='caseNumber']").val("");
+								}
+								else {
+									$("input[name='caseNumber']").val(user.caseNumber).prop("readonly", "readonly");
+								}
+
+							}
+						}
+					}, "json");
+				}
+			});
+			$(document).on('blur',"#caseNumber",function(){
+				if($("#caseNumber").val()!="") {
+					$.get("service/autoCompleteBycaseNum.do", {caseNumber: $("#caseNumber").val()}, function (data) {
+						if (data.status == 0) {
+							var user = data.data;
+							if (user != null || user != user) {
+								$("#mobile").val(user.mobile).prop("readonly", "readonly");
+								$("#username").val(user.name).prop("readonly", "readonly");
+								$("#birthday").val(user.birthday.substr(0, 10)).datetimepicker('destroy').prop("readonly", "readonly");
+								$("#deliveryTime").val(user.deliveryTime.substr(0, 10)).datetimepicker('destroy').prop("readonly", "readonly");
+
+								if (user.caseNumber == '' || user.caseNumber == null) {
+									$("input[name='caseNumber']").val("");
+								}
+								else {
+									$("input[name='caseNumber']").val(user.caseNumber).prop("readonly", "readonly");
+								}
+							}
+						}
+					}, "json");
+				}
+			});
+
+			$("#serviceType").change(function(){
+					serviceTP();
+			});
+
+			$.get("service/belongDepartment.do",function(data){
+				if(data.status==0){
+					var list=data.data;
+					if(list!=null&&list.length>0){
+						var result="";
+						$.each(list,function(n,value){
+							result +="<option value='"+value.id+"'>"+value.department+"</option>";
+						});
+						$("#departmentId").html('');
+						$("#departmentId").append(result);
+						doctorlist();
+					}
+				}
+			},"json");
+			$("#departmentId").change(function(){
+				doctorlist();
+			});
+			var doctorlist=function(){
+				$.get("service/doctorList.do",{departmentid:$("#departmentId").val()},function(data){
+					if(data.status==0){
+						var list=data.data;
+						if(list!=null&&list.length>0){
+							var result="";
+							$.each(list,function(n,value){
+								result +="<option value='"+value.id+"'>"+value.name+"</option>";
+							});
+							$("#doctorId").html('');
+							$("#doctorId").append(result);
+						}else{
+							$("#doctorId").html("<option value='0'>尚未添加医生</option>");
+						}
+					}
+				},"json");
+			};
+			$("#serviceForm").submit(function(){
+				var form = $(this);
+				form.startLoading();
+				var Pforegift=$("#Pforegift").val();
+				if(Pforegift==undefined){
+					$.alert("套餐中不包含设备押金，请前往【套餐设置】添加");
+					form.stopLoading();
+					return false;
+				}
+				var PdayRent=$("#PdayRent").val();
+				if(PdayRent==undefined){
+					$.alert("套餐中不包含租金，请前往【套餐设置】添加");
+					form.stopLoading();
+					return false;
+				}
+				$.ajax({
+					cache: false,
+					dataType: "json",
+					type: form.attr("method"),
+					url: form.attr("action"),
+					data: form.serialize(),
+					error: function(request) {
+						form.stopLoading();
+						$.alert(request);
+					},
+					success: function(data) {
+						form.stopLoading();
+						if(data.status == 1){
+							form.vaild(data.msgMap);
+						} else if(data.status == 0){
+							if(data.msg==null){
+								index.loadContent("/order/"+data.data+"/orderDetail.do")
+							}if(data.msg!=null){
+								$.alert(data.msg);
+							}
+						} else{
+							$.alert(data.msg);
+						}
+					}
+				});
+				return false;
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>

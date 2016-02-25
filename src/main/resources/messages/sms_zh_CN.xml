@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>sms</comment>
+    <entry key="sms.regTemplate">亲爱的用户，您的验证码是{0,number,#}，5分钟内有效。</entry>
+    <entry key="sms.resetTemplate">亲爱的用户，您的验证码是{0,number,#}，5分钟内有效。</entry>
+</properties>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>表单</comment>
+    <entry key="userId">用户id</entry>
+    <entry key="nickName">昵称</entry>
+    <entry key="gender">性别</entry>
+    <entry key="birthday">生日</entry>
+    <entry key="password">密码</entry>
+    <entry key="job">职业</entry>
+    <entry key="authCode">验证码</entry>
+    <entry key="longitude">经度</entry>
+    <entry key="latitude">纬度</entry>
+    <entry key="phoneNumber">手机号</entry>
+    <entry key="deviceToken">设备ID</entry>
+    <entry key="type">类型</entry>
+    <entry key="loginToken">登录token</entry>
+    <entry key="nums">数量</entry>
+    <entry key="signature">签名</entry>
+    <entry key="ChangeUserInfoForm.signature">简介</entry>
+    <entry key="headImgKey">头像</entry>
+    <entry key="imgKey">图片</entry>
+    <entry key="imgDescription">图片描述</entry>
+    <entry key="displayDate">发布时间</entry>
+    <entry key="weather">天气</entry>
+    <entry key="temperature">气温</entry>
+    <entry key="location">位置</entry>
+    <entry key="longitude">经度</entry>
+    <entry key="latitude">纬度</entry>
+    <entry key="cardId">卡片id</entry>
+    <entry key="config">客户端配置</entry>
+    <entry key="username">账号</entry>
+    <entry key="lightNums">点灯数</entry>
+    <entry key="byLightNums">被点灯数</entry>
+
+    <entry key="noAudit">白名单</entry>
+    <entry key="angel">天使</entry>
+
+
+    <entry key="cardChatId">勾搭聊天id</entry>
+
+    <entry key="fromLocation">来自位置</entry>
+    <entry key="fromLongitude">来自经度</entry>
+    <entry key="fromLatitude">来自纬度</entry>
+
+    <entry key="loginForm.name">账号</entry>
+    <entry key="loginForm.password">密码</entry>
+
+
+    <entry key="name">姓名</entry>
+    <entry key="serialnum">探头SN</entry>
+    <entry key="mobile">手机号</entry>
+
+    <entry key="caseNumber">就诊卡号</entry>
+    <entry key="username">账号</entry>
+    <entry key="hospitalId">医院</entry>
+    <entry key="departmentId">科室</entry>
+    <entry key="deliveryTime">预产期</entry>
+    <entry key="truename">姓名</entry>
+    <entry key="serviceInsideForm.name">孕妇姓名</entry>
+    <entry key="serviceDealForm.username">孕妇姓名</entry>
+</properties>

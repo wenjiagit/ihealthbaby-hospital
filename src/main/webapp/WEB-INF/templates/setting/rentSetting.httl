@@ -1,0 +1,482 @@
+<!--#set(RentSetModel model)-->
+<!--#set(ProductDO product)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('sysManage.rentSetting')}
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content setting">
+			<div class="box box-primary">
+				<div class="box-header with-border" style="padding: 10px 10px">
+					<div class="box box-primary box-solid">
+						<div class="box-header with-border">
+							<h3 class="box-title">设备押金</h3>
+							<div class="box-tools pull-right">
+							</div>
+						</div><!-- /.box-header -->
+						<div class="box-body">
+							<table class="table" id="tabgift">
+								<tr class="info">
+									<th width="30%">名称</th>
+									<th>数量(件)</th>
+									<th>金额(元)</th>
+									<th width="30%">描述</th>
+									<th>操作</th>
+								</tr>
+								<!--#for(product:model.foregift)-->
+								<tr class="active">
+									<td ><input type="text" value="${product.name}" class="form-control" placeholder="名称" id="name${product.id}" readonly></td>
+									<td ><input type="text" value="${product.innerAmount}" class="form-control setting_inputsetting_input" placeholder="数量" id="amount${product.id}" readonly></td>
+									<td><input type="text" value="${MoneyFormat(product.price)}" class="form-control setting_input" placeholder="金额" id="price${product.id}"></td>
+									<td><input type="text" value="${product.description}" class="form-control" placeholder="描述" id="description${product.id}"></td>
+									<td><button id="update${product.id}" style="width: 60px;font-size: 14px;height: 32px;" class="btn btn-xs btn-primary updateProductforegift">修改</button></td>
+								</tr>
+									<!--#end-->
+							</table>
+						</div><!-- /.box-body -->
+					</div>
+					<div class="box box-warning box-solid">
+						<div class="box-header with-border">
+							<h3 class="box-title">咨询费</h3>
+
+							<div class="box-tools pull-right">
+								<button class="btn btn-success btn-box-tool" style="width: 100px;font-size: 14px;" id="addAskPrice" ><i class="fa fa-plus" style="color:#fff;font-size: 18px;margin-right: 10px;"></i>添加设置</button>
+							</div>
+						</div><!-- /.box-header -->
+						<div class="box-body">
+							<table class="table" id="tabAsk">
+								<tr class="info">
+									<th>名称</th>
+									<th>收费方式</th>
+									<th>次数</th>
+									<th>金额</th>
+									<th>最大购买数量</th>
+									<th>描述</th>
+									<th>操作</th>
+								</tr>
+								<!--#for(product:model.askPrice)-->
+								<tr class="active">
+									<td ><input type="text" value="${product.name}" class="form-control" placeholder="名称" id="askPname${product.id}"  #if(product.innerAmount == 1) readonly #end></td>
+									<td><select class="form-control" id="askPType${product.id}"><option value="0" #if(product.chargeType==0) selected #end>代收</option><option value="1" #if(product.chargeType==1) selected #end>医院</option><option value="2" #if(product.chargeType==2) selected #end disabled></option> </select></td>
+									<td><select class="form-control" id="askPamount${product.id}"  #if(product.innerAmount == 1) disabled #end>
+										<option value="-1"  #if(product.innerAmount=='-1') selected #end>不限次数</option>
+										<option value="0"   #if(product.innerAmount!="-1") selected #end>限<!--#if(product.innerAmount!= -1)-->${product.innerAmount}<!--#end-->次</option>
+									</select></td>
+									<td><input type="text" value="${MoneyFormat(product.price)}" class="form-control zx_input zx_price_alert" placeholder="金额" id="askPprice${product.id}"></td>
+									<td><input type="text" value="${product.maxAmount}" class="form-control zx_input zx_mount_alert" placeholder="最大购买数量" id="askMax${product.id}"></td>
+									<td><input type="text" value="${product.description}" class="form-control" placeholder="描述" id="askDesc${product.id}"></td>
+									<td><button type="button" style="width: 60px;font-size: 14px;height: 32px;"  id="pri${product.id}"  class="btn btn-xs btn-primary updateAskPrice">修改</button></td>
+								</tr>
+								<!--#end-->
+							</table>
+						</div><!-- /.box-body -->
+					</div>
+
+					<div class="box box-info box-solid">
+						<div class="box-header with-border">
+							<h3 class="box-title">租金</h3>
+							<div class="box-tools pull-right">
+								<button class="btn btn-success btn-box-tool" style="width: 100px;font-size: 14px;" id="addDayRent" ><i class="fa fa-plus" style="color:#fff;font-size: 18px;margin-right: 10px;"></i>添加设置</button>
+							</div>
+						</div><!-- /.box-header -->
+						<div class="box-body">
+							<table class="table" id="tabdayRent">
+								<tr class="info">
+									<th>名称</th>
+									<th>天数(天)</th>
+									<th>金额(元)</th>
+									<th>最大购买数量</th>
+									<th>描述</th>
+									<th>操作</th>
+								</tr>
+								<!--#for(product:model.dayRent)-->
+								<tr class="active">
+									<td ><input type="text" value="${product.name}" class="form-control" placeholder="名称" id="dayname${product.id}" #if(product.innerAmount == 1) readonly #end></td>
+									<td><select class="form-control"  id="dayamount${product.id}" #if(product.innerAmount == 1) disabled #end>
+										<option value="-1"  #if(product.innerAmount=='-1') selected #end>不限天数</option>
+										<option value="1"  #if(product.innerAmount=='1') selected #end>1天</option>
+										<option value="7"  #if(product.innerAmount=='7') selected #end>1周</option>
+										<option value="14"  #if(product.innerAmount=='14') selected #end>2周</option>
+										<option value="21"  #if(product.innerAmount=='21') selected #end>3周</option>
+										<option value="28"  #if(product.innerAmount=='28') selected #end>4周</option>
+										<option value="35"  #if(product.innerAmount=='35') selected #end>5周</option>
+										<option value="42"  #if(product.innerAmount=='42') selected #end>6周</option>
+										<option value="49"  #if(product.innerAmount=='49') selected #end>7周</option>
+									</select></td>
+									<td><input type="text" value="${MoneyFormat(product.price)}" class="form-control zj_input price_alert" placeholder="金额" id="dayprice${product.id}"></td>
+									<td><input type="text" value="${product.maxAmount}" class="form-control zj_input mount_alert" placeholder="最大购买数量" id="dayMax${product.id}"></td>
+									<td><input type="text" value="${product.description}" class="form-control" placeholder="描述" id="dayDesc${product.id}"></td>
+									<td><button id="day${product.id}" style="width: 60px;font-size: 14px;margin-left: 5px;"  class="btn btn-sm btn-primary  updatedayRent">修改</button><!--#if(product.innerAmount != 1)--><button id="ren${product.id}" style="width: 60px;font-size: 20px;margin-top: 3px;margin-left: 5px;"  class="btn btn-xs btn-primary  delproduct">删除</button><!--#end--></td>
+								</tr>
+								<!--#end-->
+							</table>
+						</div><!-- /.box-body -->
+					</div>
+
+					<div class="box box-danger box-solid">
+						<div class="box-header with-border">
+							<h3 class="box-title">耗材包费</h3>
+							<div class="box-tools pull-right">
+								<button class="btn btn-success btn-box-tool" style="width: 100px;font-size: 14px;" id="addCouplant"><i class="fa fa-plus" style="color:#fff;font-size: 18px;margin-right: 10px;"></i>添加设置</button>
+							</div>
+						</div><!-- /.box-header -->
+						<div class="box-body">
+							<table class="table" id="tabCouplant">
+								<tr class="info">
+									<th>名称</th>
+									<th>数量</th>
+									<th>金额</th>
+									<th>最大购买数量</th>
+									<th>描述</th>
+									<th>操作</th>
+								</tr>
+								<!--#for(product:model.couplant)-->
+								<tr class="active">
+									<td ><input type="text" value="${product.name}" class="form-control" placeholder="名称" id="couname${product.id}"></td>
+									<td ><input type="text" value="${product.innerAmount}" class="form-control hcb_input hcb_mount_alert" placeholder="数量" id="couamount${product.id}"></td>
+									<td><input type="text" value="${MoneyFormat(product.price)}" class="form-control hcb_input hcb_price_alert"  placeholder="金额" id="couprice${product.id}"></td>
+									<td><input type="text" value="${product.maxAmount}" class="form-control hcb_input hcb_Amount_alert" placeholder="最大购买数量" id="couMax${product.id}"></td>
+									<td><input type="text" value="${product.description}" class="form-control " placeholder="描述" id="couDesc${product.id}"></td>
+									<td><button id="pla${product.id}" style="width: 60px;font-size: 14px"  class="btn btn-sm btn-primary updateCouplant" >修改</button><!--#if(product.innerAmount != 1)--><button id="cou${product.id}" style="width: 60px;font-size: 20px;margin-top: 3px;margin-left: 5px;"  class="btn btn-xs btn-primary delproduct">删除</button><!--#end--></td>
+								</tr>
+								<!--#end-->
+							</table>
+						</div><!-- /.box-body -->
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- /.content -->
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="js/index.min.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			"use strict";
+			var page=$('.setting');
+			page.find("#addCouplant").bind("click",function(){
+				var tr=$("<tr class='active'></tr>");
+				tr.append("<td><input type='text' class='form-control' id='couplantname' /></td>"+
+						"<td><input type='text' class='form-control hcb_input' id='couplantamount' /></td>" +
+						"<td><input type='text' class='form-control hcb_input' id='couplantprice' /></td>" +
+						"<td><input type='text' class='form-control hcb_input' id='couplantMax' /></td>" +
+						"<td><input type='text' class='form-control ' id='couplantDesc' /></td>" +
+						"<td><button style='width: 60px;font-size: 20px' class='btn btn-sm btn-primary fa  fa-save' id='couplantAdd' title='保存'></button></td>");
+				$("#tabCouplant").append(tr);
+				$("#couplantAdd").bind("click",function(){
+					var params={
+						name:$("#couplantname").val(),
+						price:$("#couplantprice").val()*100,
+						amount:$("#couplantamount").val(),
+						maxamount:$("#couplantMax").val(),
+						description:$("#couplantDesc").val(),
+						type:"couplant",
+						chargeType:0
+					};
+					addProduct(params);
+				});
+				page.find("#addCouplant").unbind("click");
+			});
+			page.find("#addDayRent").bind("click",function(){
+				var tr=$("<tr class='active'></tr>");
+				tr.append("<td><input type='text' class='form-control' id='dayRentname' /></td>"+
+						"<td><select class='form-control' id='dayRentamount' >" +
+						"<option value='-1'>不限天数</option>" +
+						"<option value='1'>1天</option> " +
+						"<option value='7' >1周</option> " +
+						"<option value='14' >2周</option>" +
+						"<option value='21' >3周</option>" +
+						"<option value='28' >4周</option>" +
+						"<option value='35' >5周</option> " +
+						"<option value='42' >6周</option> " +
+						"<option value='49'>7周</option>" +
+						"</select></td>" +
+						"<td><input type='text' class='form-control zj_input' id='dayRentprice' /></td>" +
+						"<td><input type='text' class='form-control zj_input' id='dayRentMax' /></td>" +
+						"<td><input type='text' class='form-control ' id='dayRentDesc' /></td>" +
+						"<td><button style='width: 60px;font-size: 20px' class='btn btn-sm btn-primary fa  fa-save' id='dayRentAdd' title='保存'></button></td>");
+				$("#tabdayRent").append(tr);
+				page.find("#dayRentAdd").bind("click",function(){
+					var params={
+						name:$("#dayRentname").val(),
+						price:$("#dayRentprice").val()*100,
+						amount:$("#dayRentamount").val(),
+						maxamount:$("#dayRentMax").val(),
+						description:$("#dayRentDesc").val(),
+						type:"dayRent",
+						chargeType:0
+					}
+					addProduct(params);
+				})
+				page.find("#addDayRent").unbind("click");
+			});
+			page.find("#addAskPrice").bind("click",function(){
+				var tr=$("<tr class='active'></tr>");
+				tr.append("<td><input type='text' class='form-control' id='askname' /></td>"+
+						"<td><select class='form-control' id='askchargeType'><option value='0'>代收</option><option value='1'>医院</option></select></td>" +
+						"<td><select class='form-control' id='askamount'>" +
+						"<option value='-1'>不限次数</option>" +
+						"<option value='0'>限次</option>" +
+						"</select></td>" +
+						"<td><input type='text' class='form-control zx_input' id='askprice' /></td>" +
+						"<td><input type='text' class='form-control zx_input ' id='askMax' /></td>" +
+						"<td><input type='text' class='form-control ' id='askDescrition' /></td>" +
+						"<td><button style='width: 60px;font-size:20px' class='btn btn-sm btn-primary fa  fa-save' id='AskAdd' title='保存'></button></td>");
+				$("#tabAsk").append(tr);
+				page.find("#AskAdd").bind("click",function(){
+					var params={
+						name:$("#askname").val(),
+						amount:$("#askamount").val(),
+						price:$("#askprice").val()*100,
+						maxamount:$("#askMax").val(),
+						description:$("#askDescrition").val(),
+						type:"askPrice",
+						chargeType:$("#askchargeType").val()
+					}
+					addProduct(params);
+				})
+				page.find("#addAskPrice").unbind("click");
+			});
+			$(document).on('blur','.setting_input',function(){
+				var num=$(this).val();
+				if(num!=null && num!=''){
+					if(!(/(^[0-9]+(.[0-9]{1,3})?$)/).test(num)){
+						$.alert('您好，请输入整数或小数！',
+							{
+								backdrop: false
+							}
+						);
+						$(".setting_input").val('').focus();
+					}
+				}
+			});
+			$(document).on('blur','.zx_input',function(){
+				var num=$(this).val();
+				if(num!=null && num!=''){
+					if(!(/(^[0-9]+(.[0-9]{1,3})?$)/).test(num)){
+						$.alert('您好，请输入整数或小数！',
+							{
+								backdrop: false
+							}
+						);
+						$(this).val('').focus();
+					}
+				}
+			})
+			$(document).on('blur','.hcb_input',function(){
+				var num=$(this).val();
+				if(num!=null && num!=''){
+					if(!(/(^[0-9]+(.[0-9]{1,3})?$)/).test(num)){
+						$.alert('您好，请输入整数或小数！',
+							{
+								backdrop: false
+							}
+						);
+						$(this).val('').focus();
+					}
+				}
+			})
+			$(document).on('blur','.zj_input',function(){
+				var num=$(this).val();
+				if(num!=null && num!=''){
+					if(!(/(^[0-9]+(.[0-9]{1,3})?$)/).test(num)){
+						$.alert('您好，请输入整数或小数！',
+							{
+								backdrop: false
+							}
+						);
+						$(this).val('').focus();
+					}
+				}
+			})
+			var addProduct = function(params){
+				 $.ajax({
+					 url : "setting/addproduct.do",
+					 data :params,
+					 type : 'post',
+					 dataType : "json ",
+					 cache : false,
+					 error : function(textStatus, errorThrown) {
+					 },
+					 success : function(data) {
+						 if(data.status==0){
+							 index.loadContent("/setting/rentSetting.do")
+						 }
+						 else{
+							 $.alert("金额和数量不能为空！",{
+								 backdrop: false
+							 });
+						 }
+					 }
+				 });
+			 }
+			page.find(".updateProductforegift").click(function(e){
+			 var str=$(e.target).attr("id");
+			 var id=str.substr(6,str.length);
+			 var params={
+				 id:id,
+				 name:$("#name"+id).val(),
+				 price:$("#price"+id).val()*100,
+				 amount:$("#amount"+id).val(),
+				 maxamount:1,
+				 description:$("#description"+id).val()
+			 };
+			 $.ajax({
+				 url : "setting/updateForgift.do",
+				 data :params,
+				 type : 'post',
+				 dataType : "json ",
+				 cache : false,
+				 error : function(textStatus, errorThrown) {
+				 },
+				 success : function(data) {
+					 if(data.price!=null&& data.price!=''){
+						 if(data.status==0){
+							 index.loadContent("/setting/rentSetting.do");
+							 $.alert("修改成功");
+						 }
+					 }
+					 else{
+						 $.alert('金额不能为空！',
+							 {
+								 backdrop: false
+							 }
+						 );
+					 }
+
+				 }
+			 });
+		 });
+		page.find(".updatedayRent").click(function(e){
+			 var str=$(e.target).attr("id");
+			 var id=str.substr(3,str.length);
+			 var params={
+				 id:id,
+				 name:$("#dayname"+id).val(),
+				 price:$("#dayprice"+id).val()*100,
+				 amount:$("#dayamount"+id).val(),
+				 maxamount:$("#dayMax"+id).val(),
+				 description:$("#dayDesc"+id).val()
+			 };
+			 $.ajax({
+				 url : "setting/updateDayRent.do",
+				 data :params,
+				 type : 'post',
+				 dataType : "json ",
+				 cache : false,
+				 error : function(textStatus, errorThrown) {
+				 },
+				 success : function(data) {
+					 if (data.status == 0) {
+						 index.loadContent("/setting/rentSetting.do");
+						 $.alert("修改成功");
+					 }
+					 else{
+						 $.alert("金额和数量不能为空！",{
+							 backdrop: false
+						 });
+					 }
+				 }
+			 });
+	 	});
+
+		page.find(".updateAskPrice").click(function(e){
+			var str=$(e.target).attr("id");
+			var id=str.substr(3,str.length);
+			var params={
+				id:id,
+				name:$("#askPname"+id).val(),
+				price:$("#askPprice"+id).val()*100,
+				amount:$("#askPamount"+id).val(),
+				chargeType:$("#askPType"+id).val(),
+				maxamount:$("#askMax"+id).val(),
+				description:$("#askDesc"+id).val()
+			};
+			$.ajax({
+				url : "setting/updateAskPrice.do",
+				data :params,
+				type : 'post',
+				dataType : "json ",
+				cache : false,
+				error : function(textStatus, errorThrown) {
+				},
+				success : function(data) {
+					if(data.status==0) {
+						index.loadContent("/setting/rentSetting.do");
+						$.alert("修改成功");
+					}
+					else{
+						$.alert("金额和数量不能为空！",{
+							backdrop: false
+						});
+					}
+				}
+			});
+		});
+
+		page.find(".updateCouplant").click(function(e){
+			var str=$(e.target).attr("id");
+			var id=str.substr(3,str.length);
+			var params={
+				id:id,
+				name:$("#couname"+id).val(),
+				price:$("#couprice"+id).val()*100,
+				amount:$("#couamount"+id).val(),
+				maxamount:$("#couMax"+id).val(),
+				description:$("#couDesc"+id).val()
+			};
+			$.ajax({
+				url : "setting/updateCouplant.do",
+				data :params,
+				type : 'post',
+				dataType : "json ",
+				cache : false,
+				error : function(textStatus, errorThrown) {
+				},
+				success : function(data) {
+					if(data.status==0){
+						index.loadContent("/setting/rentSetting.do");
+						$.alert("修改成功");
+					}
+					else{
+						$.alert(" 数量，金额和最大购买数量不能为空 ！",{
+							backdrop: false
+						});
+					}
+				}
+			});
+		});
+
+		page.find(".delproduct").click(function(e){
+			var str=$(e.target).attr("id");
+			var id=str.substr(3,str.length);
+
+			$.ajax({
+				url : "setting/delForgift.do",
+				data :params,
+				type : 'post',
+				dataType : "json ",
+				cache : false,
+				error : function(textStatus, errorThrown) {
+				},
+				success : function(data) {
+					if(data.status==0){
+						index.loadContent("/setting/rentSetting.do")
+					}
+				}
+			});
+		});
+	})(jQuery);
+</script>
+</body>
+</html>

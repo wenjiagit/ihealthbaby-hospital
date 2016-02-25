@@ -1,0 +1,106 @@
+<!--#set(InsideServiceModel model) -->
+<!--#set(PageResult page)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('insideService.insideServiceListToDeal')} <small>监护列表</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content serviceList">
+			<div class="box box-primary">
+				<div class="box-header">
+						
+						<!-- /.btn-group -->
+						<button class="btn btn-default btn-sm" id="refresh">
+							<i class="fa fa-refresh"></i>
+						</button>
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll"class="th_checkbox_btn" /><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty" style="padding-left: 20px">监护服务单号</th>
+									<th class="table_th_sty">孕妇姓名</th>
+									<th class="table_th_sty">手机号</th>
+									<th class="table_th_sty">所属医院</th>
+									<th class="table_th_sty">科室</th>
+									<th class="table_th_sty">负责医生</th>
+									<th class="table_th_sty"> 就诊卡号</th>
+									<th class="table_th_sty">孕周</th>
+									<th class="table_th_sty">开通时间</th>
+									<th class="table_th_sty">监测状态</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(model : page.value)  -->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${model.id}" /></td>-->
+									<td  style="padding-left: 20px">${NumberFormat(model.serviceNumber)}</td>
+									<td>${model.name}</td>
+									<td>${model.mobile}</td>
+									<td>${model.hospitalDO.name}</td>
+									<td>${model.departmentDO.department}</td>
+									<td>${model.sysUserDO.name}</td>
+									<td>${model.caseNumber}</td>
+									<td>${model.gestationalWeeks}</td>
+									<td>${model.createtime}</td>
+									<!--#if(model.status == 0)-->
+									<td>未监护</td>
+									<!--#else(model.status == 1)-->
+									<td>已监护</td>
+									<!--#end-->
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+					$!{page(page,"index.loadContent('/insideService/insideServiceListToDeal.do?page={page}&amp;pageSize={pageSize}')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="build/js/index.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			var page = $(".serviceList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#refresh").click(function(){
+				index.loadContent("insideService/insideServiceListToDeal.do");
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>

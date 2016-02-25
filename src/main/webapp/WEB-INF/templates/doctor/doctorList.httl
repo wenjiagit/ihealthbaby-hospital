@@ -1,0 +1,224 @@
+<!--#set(DoctorModel doctor) -->
+<!--#set(PageResult page)-->
+<!--#set(String permission)-->
+<!--#set(DoctorQueryForm form)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner doctorList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('doctor')} <small>医生列表</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div class="btn-group">
+						<!-- #if(perm('doctor.delete')||perm('doctorHospital.delete')||perm('doctorDepartment.delete')) -->
+						<!--<button class="btn btn-default btn-sm" id="deleteDoctor">
+							<i class="fa fa-trash-o"></i>禁用
+						</button>-->
+						<!-- #end -->
+						<!-- #if(perm('doctor.add')||perm('doctorHospital.add')||perm('doctorDepartment.add')) -->
+							<div class="col-lg-1 col-md-1 col-xs-1"  style="padding: 0;">
+								<button id="addDoctor" class="btn btn-default btn-sm" >
+									添加
+								</button>
+							</div>
+						<!-- #end -->
+						<div class="col-lg-11 col-md-11 col-sm-11">
+							<form id="searchForm" action="/service/ServiceList.do" method="get">
+								<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span  class="btn btn-default">姓名</span>
+										</div>
+										<input type="text" class="form-control" name="name" value="${form.name}">
+									</div>
+								</div>
+								<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span  class="btn btn-default">手机号</span>
+										</div>
+										<input type="text" class="form-control" name="mobile" value="${form.mobile}">
+									</div>
+								</div>
+								<!--#if(perm('doctor'))-->
+								<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span  class="btn btn-default">所属医院</span>
+										</div>
+										<input type="text" class="form-control" name="hospitalName" value="${form.hospitalName}">
+									</div>
+								</div>
+								<!--#end-->
+								<!--#if(perm('doctor')||perm('doctorHospital'))-->
+								<div class="col-lg-3 col-md-4 col-xs-6 col-sm-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span  class="btn btn-default">所属科室</span>
+										</div>
+										<input type="text" class="form-control" name="departmentName" value="${form.departmentName}">
+									</div>
+								</div>
+								<!--#end-->
+								<div  class="col-lg-4 col-md-6 col-sm-6 col-xs-6">
+									<input type="hidden" name="page" value="1">
+									<input type="hidden" name="pageSize" value="${page.pageSize}">
+									<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+									<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+								</div>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll" class="th_checkbox_btn"/><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty" style="padding-left: 20px">编号</th>
+									<th class="table_th_sty">头像</th>
+									<th class="table_th_sty">姓名</th>
+									<th class="table_th_sty">账号</th>
+									<th class="table_th_sty">手机号</th>
+									<th class="table_th_sty">所属医院</th>
+									<th class="table_th_sty">科室</th>
+									<th class="table_th_sty">医师级别</th>
+									<th class="table_th_sty">状态</th>
+									<th class="table_th_sty">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(doctor : page.value)  -->
+								<tr>
+									<!--#set(int num=(page.page-1)*page.pageSize)-->
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${doctor.id}" /></td>-->
+									<td style="padding-left: 20px">${num+for.index+1}</td>
+									<td class="mailbox-name item"><div class="product-img"><img src="${doctor.headPic}?imageMogr2/thumbnail/256x256" style="width: 35px;height:35px;"></div></td>
+									<td><a href="javascript:void(0)" class="toDetail" id="${doctor.id}">${doctor.name}</a></td>
+									<td>${doctor.username}</td>
+									<td>${doctor.mobile}</td>
+									<td>${doctor.hospitalDO.name}</td>
+									<td>${doctor.departmentDO.department}</td>
+									<td>${doctor.title}</td>
+									<!-- #if(doctor.isStopped == false) -->
+									<td style="color: #69B6EB;">启用</td>
+									<!-- #else -->
+									<td style="color: red;;">禁用</td>
+									<!-- #end -->
+									<td>
+										<div class="btn-group" role="group" aria-label="...">
+									<!-- #if(perm('doctor.update')||perm('doctorHospital.update')||perm('doctorDepartment.update')) -->
+ 										<button  type="button" class="btn btn-primary btn-sm updateDoctor" id="${doctor.id}" style="border:1px solid #62a8dc" >修改</button>
+									<!-- #end -->
+									<!-- #if(perm('doctor.doctorPwdReset')||perm('doctorHospital.doctorPwdReset')||perm('doctorDepartment.doctorPwdReset')) -->
+										<button  type="button" class="btn btn-primary btn-sm updatePwd" id="${doctor.id}" style="border:1px solid #62a8dc" >重置密码</button>
+									<!-- #end -->
+										</div>
+									</td>
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+					$!{page(page,"index.loadContent('/staffManage/doctors.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="js/index.min.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+//			$('input').iCheck({
+//				checkboxClass: 'icheckbox_square-blue',
+//				radioClass: 'iradio_square-blue',
+//				increaseArea: '20%' // optional
+//			});
+			var page = $(".doctorList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#deleteDoctor").click(function() {
+				var chk_value = [];
+				page.find('input[name="subBox"]:checked').each(function() {
+					chk_value.push($(this).val());
+				});
+				jQuery.ajax({
+					'type' : 'DELETE',
+					'url' : "staffManage/deleteDoctors.do",
+					'contentType' : 'application/json',
+					'data' : JSON.stringify({
+						'ids' : chk_value
+					}),
+					'dataType' : 'json',
+					'success' : function(data) {
+						index.loadContent("staffManage/doctors.do");
+					}
+				});
+			});
+
+			page.find("#addDoctor").click(function(){
+				index.loadDialog({url: "staffManage/addDoctor.do?permission=${permission}",target:"staffManage/doctors.do",title:'添加医生'});
+			});
+			
+			page.find("#refresh").click(function(){
+				index.loadContent("staffManage/doctors.do");
+
+			});
+
+			page.find(".updateDoctor").click(function(e){
+				var uid= $(e.target).attr('id');
+				index.loadDialog({url: "staffManage/updateDoctor/"+uid+".do",target:"staffManage/doctors.do",title:'更改医生信息'});
+			});
+			page.find(".toDetail").click(function(e){
+				var uid= $(e.target).attr('id');
+				index.loadContent("staffManage/doctorDetail.do?doctorId="+uid);
+			});
+			page.find(".updatePwd").click(function(e){
+				var uid= $(e.target).attr('id');
+				index.loadContent("staffManage/docPassword.do?id="+uid);
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("staffManage/doctors.do?"+form.serialize());
+				return false;
+			});
+
+		})(jQuery);
+	</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!--#set(UserDO user)-->
+<!--#set(List<ServiceModel> service)-->
+<!--#set(List<AdviceAskModel> advice)-->
+<!--#set(List<OrderServiceModel> order)-->
+<!--#set(ServiceModel model)-->
+<!--#set(OrderServiceModel orderDO)-->
+<!--#set(AdviceAskModel adv)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner">
+		<section class="content-header">
+
+			<div style="border-bottom: 2px solid #3498DB;padding-bottom: 5px">
+				<span style="font-size: 24px;">$!{permName('gravida.gravidaDetail')}</span> <small>孕妇详情</small>
+			</div>
+		</section>
+		<section class="content" style="padding: 0;margin: 0">
+			<div class="content row">
+				<div class="box box-primary" style="margin-top:-15px">
+					<div class="box-header">
+						<div class="col-md-12">
+							<div class="user-panel" style="margin-left: -15px">
+								<div class="img" style="float: left;">
+									<img src="${user.headPic}?imageMogr2/thumbnail/500x500" height="120" width="120" class="img-circle"/>
+								</div>
+								<div style="float: left;margin-top: 20px;">
+									<div class="col-md-4 col-xs-6 user_details">姓名：<span class="user_details_val">${user.name}</span></div>
+									<div class="col-md-8 col-xs-6 user_details">手机号：<span class="user_details_val">${user.mobile}</span></div>
+									<div class="col-md-4 col-xs-6 user_details">出生日期：<span class="user_details_val">${user.birthday.format("yyyy-MM-dd")}</span></div>
+									<div class="col-md-8 col-xs-6 user_details">预产期：<span class="user_details_val">${user.deliveryTime.format("yyyy-MM-dd")}</span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box box-primary" style="margin-top:-10px;background-color: #ECF0F5;">
+					<div class="report">监护信息</div>
+					<div class="chart">订单信息</div>
+					<div class="consultation" >咨询信息</div>
+					<div class="high_risk" >高危评分</div>
+					<div style="clear: both"></div>
+				</div>
+				<div class="box box-primary" style="margin-top: -10px;background-color: #ECF0F5;">
+					<div class="custody_div">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+							<tr class="info">
+								<th class="table_th_sty" style="padding-left: 20px">服务单号</th>
+								<th class="table_th_sty">已咨询 / 总咨询</th>
+								<th class="table_th_sty">开通时间</th>
+								<th class="table_th_sty">结算时间</th>
+								<th class="table_th_sty">设备SN</th>
+								<th class="table_th_sty">负责医生</th>
+								<th class="table_th_sty">就诊卡号</th>
+							</tr>
+							</thead>
+							<tbody>
+							<!--#for(model : service)-->
+							<tr>
+								<td style="padding-left: 20px">${NumberFormat(model.serviceNumber)}</td>
+								<td>${model.usedCount} /<!--#if(model.totalCount == -1)-->不限次<!--#else-->${model.totalCount}<!--#end--></td>
+								<td>${model.beginTime}</td>
+								<td>${model.endTime}</td>
+								<td>${model.serialnum}</td>
+								<td>${model.sysUserDO.name}</td>
+								<td>${model.caseNumber}</td>
+							</tr>
+							<!--#end-->
+							</tbody>
+						</table>
+					</div>
+					<!--订单信息-->
+					<div class="box_margin">
+						<div class="order_div" style="display: none;">
+							<table class="table table-hover table-striped table_height">
+								<thead>
+								<tr class="info">
+									<th class="table_th_sty" style="padding-left: 20px">订单号</th>
+									<th class="table_th_sty">服务单号</th>
+									<th class="table_th_sty">订单类型</th>
+									<th class="table_th_sty">订单金额</th>
+									<th class="table_th_sty">运费</th>
+									<th class="table_th_sty">配送类型</th>
+									<th class="table_th_sty">订单状态</th>
+								</tr>
+								</thead>
+								<tbody>
+								<!--#for(orderDO : order)-->
+								<tr>
+									<td style="padding-left: 20px">${orderDO.id}</td>
+									<td>${NumberFormat(orderDO.serviceDO.serviceNumber)}</td>
+									<td><!--#if(orderDO.orderType==0||orderDO.orderType==2)-->APP订单<!--#else-->WEB订单<!--#end--></td>
+									<td>￥${getAccountantMoney(orderDO.orderFee)}</td>
+									<td>￥${getAccountantMoney(orderDO.deliverFee)}</td>
+									<td><!--#if(orderDO.deliverType==1)-->邮寄<!--#else-->到院自取<!--#end--></td>
+									<td><!--#if(orderDO.orderStatus==0)-->未支付
+										<!--#else(orderDO.orderStatus==1)-->待发货
+										<!--#else(orderDO.orderStatus==2)-->待收货
+										<!--#else(orderDO.orderStatus==3)-->订单结束
+										<!--#else-->订单取消
+										<!--#end-->
+									</td>
+								</tr>
+								<!--#end-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--咨询信息-->
+					<div class="box_margin">
+						<div class="consultation_div" style="display: none">
+							<table class="table table-hover table-striped table_height">
+								<thead>
+								<tr class="info" >
+									<th class="table_th_sty" style="padding-left: 20px">咨询单号</th>
+									<th class="table_th_sty">咨询时间</th>
+									<th class="table_th_sty">咨询医生</th>
+									<th class="table_th_sty">孕周</th>
+									<th class="table_th_sty">监护时长</th>
+									<th class="table_th_sty">监护状态</th>
+								</tr>
+								</thead>
+								<tbody>
+								<!--#for(adv : advice)-->
+								<tr>
+									<td style="padding-left: 20px">${NumberFormat(adv.adviceDO.adviceNumber)}</td>
+									<td>${adv.askTime}</td>
+									<td>${adv.sysUserDO.name}</td>
+									<td>${adv.adviceDO.gestationalWeeks}</td>
+									<td>${adv.adviceDO.testTimeLong}</td>
+									<td><!--#if(adv.adviceDO.status==0)-->未咨询
+										<!--#else(adv.adviceDO.status==1)-->未回复
+										<!--#else(adv.adviceDO.status==2)-->已回复
+										<!--#else-->已删除
+										<!--#end-->
+									</td>
+								</tr>
+								<!--#end-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+	</div>
+	${include('/commons/foot.httl')}
+	<!--监护信息-->
+
+	<script>
+		(function ($) {
+			'use strict';
+			$(document).on('click','.report',function(){
+				$(this).css({"background-color":"#3498DB","color":"#fff"});
+				$(".chart").css({"background-color":"#ECF0F5","color":"#000"});
+				$(".consultation").css({"background-color":"#ECF0F5","color":"#000"});
+				$(".high_risk").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".custody_div").css("display","block");
+				$(".order_div").css("display","none");
+				$(".consultation_div").css("display","none");
+				$(".high_risk_div").css("display", "none");
+
+			});
+			$(document).on('click','.chart',function() {
+				$(this).css({"background-color": "#3498DB", "color": "#fff"});
+				$(".report").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".consultation").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".high_risk").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".order_div").css("display", "block");
+				$(".custody_div").css("display", "none");
+				$(".consultation_div").css("display", "none");
+				$(".high_risk_div").css("display", "none");
+			});
+			$(document).on('click','.consultation',function() {
+				$(this).css({"background-color": "#3498DB", "color": "#fff"});
+				$(".report").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".chart").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".high_risk").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".order_div").css("display", "none");
+				$(".custody_div").css("display", "none");
+				$(".high_risk_div").css("display", "none");
+				$(".consultation_div").css("display", "block");
+
+			});
+			$(document).on('click','.high_risk',function() {
+				$(this).css({"background-color": "#3498DB", "color": "#fff"});
+				$(".report").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".chart").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".consultation").css({"background-color": "#ECF0F5", "color": "#000"});
+				$(".order_div").css("display", "none");
+				$(".custody_div").css("display", "none");
+				$(".consultation_div").css("display", "none");
+				$(".high_risk_div").css("display", "block");
+			});
+
+		})(jQuery);
+	</script>
+</body>
+</html>

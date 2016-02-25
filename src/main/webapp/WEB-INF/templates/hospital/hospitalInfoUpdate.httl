@@ -1,0 +1,139 @@
+<!-- #set(HospitalModel hospital) -->
+<!--#set(List<ProvincesDO> province)-->
+<!--#set(ProvincesDO provinceDO)-->
+<!--#set(DepartmentDO dep)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="box box-danger">
+			<div class="box-header">
+				<h3 class="box-title">$!{permName('hosManage.hosptialInfoList.update')}</h3>
+			</div>
+			<div class="box-body">
+				<!-- Date dd/mm/yyyy -->
+				<form id="hospitalist" class="dialog-content" action="sysManage/${hospital.id}/updatehospital.do" method="post">
+					<div class="form-group">
+						<label style="margin-top: -30px">医院名称:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar" style="font-size: 19px"></i>
+							</div>
+							<input type="text" id="name" name="name" class="form-control"
+								   placeholder="医院名称" value="${hospital.name}" />
+							</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label style="margin-top: -30px">省市区县:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-sign-in"  style="font-size: 21px"></i>
+							</div>
+							<div class="input-group">
+								<select  id="province" runat="server" name="province"  class="select_input" style="margin-left: 0px">
+									<!--#for(provinceDO : province)-->
+									<option value="${provinceDO.provinceid}" #if(provinceDO.province == hospital.province) selected #end>${provinceDO.province}</option>
+									<!--#end-->
+								</select>
+								<select  id="city" runat="server" name="city"  class="select_input">
+									<option value="${hospital.cityid}">${hospital.city}</option>
+								</select>
+								<select  id="county" runat="server" name="county" class="select_input">
+									<option value="${hospital.countyid}">${hospital.county}</option>
+								</select>
+							</div>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<!-- phone mask -->
+					<div class="form-group">
+						<label style="margin-top: -30px">详细地址:<span style="color:red;font-size:28px; position: relative;top: 9px;left: 3px;">*</span></label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-paper-plane-o" style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="address" name="address" placeholder="详细地址" value="${hospital.address}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group" style="margin-top: 15px">
+						<label>联系人:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-pencil-square-o"  style="font-size: 21px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="linkMan" name="linkMan" placeholder="联系人" value="${hospital.linkMan}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>联系电话:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-fw fa-building" style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="mobile"  name="mobile" placeholder="联系电话" value="${hospital.mobile}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="form-group">
+						<label>pos机编号:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-fw fa-building" style="font-size: 19px"></i>
+							</div>
+							<input type="text" class="form-control"
+								   id="posNo"  name="posNo" placeholder="pos机编号" value="${hospital.posNo}"/>
+						</div>
+						<!-- /.input group -->
+					</div>
+					<div class="dialog-footer-buttons">
+						<button type="submit" class="btn btn-primary">更新信息</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+	(function ($) {
+		'use strict';
+		$("#province").change(function () {
+			$.get("sysManage/"+$("#province").val()+"/getCityByProvinceId.do",function(data){
+				if(data.status==0){
+					var result = "<option value='000000'>选择城市</option>";
+					$.each(data.data,function(n,value){
+						result +="<option value='"+value.cityid+"'>"+value.city+"</option>";
+					});
+					$("#city").html('');
+					$("#city").append(result);
+				}
+			},"json");
+		});
+
+		$("#city").change(function () {
+			$.get("sysManage/"+$("#city").val()+"/getAreaByCityId.do",function(data){
+				if(data.status==0){
+					var result = "<option value='000000'>选择区域</option>";
+					$.each(data.data,function(n,value){
+						result +="<option value='"+value.areaid+"'>"+value.area+"</option>";
+					});
+					$("#county").html('');
+					$("#county").append(result);
+				}
+			},"json");
+		});
+})(jQuery);
+</script>
+</body>
+</html>

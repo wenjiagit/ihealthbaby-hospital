@@ -1,0 +1,462 @@
+<!--#set(ReportSettingModel model)-->
+<!--#set(NstOptionDO nst)-->
+<!--#set(CatOptionDO cat)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+
+</head>
+<body>
+	<div class="content-wrapper-inner">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('sysManage.reportSetting')} <small>设置详情</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content reportSetting">
+			<div class="box box-primary">
+				<div class="box-header">
+				</div>
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages col-sm-12">
+						<div class="row">
+						<div class=" col-sm-6">
+							<form action="">
+							<div class="box box-primary box-solid">
+								<div class="box-header with-border">
+									<h3 class="box-title">参数设置</h3>
+								</div><!-- /.box-header -->
+								<div class="box-body">
+
+<!--							<div class="form-group">
+								<label>缩放倍数:</label>
+								<div class="input-group">
+									<input type="text" class="form-control"
+										   id="zoom"  name="zoom" placeholder="缩放倍数"  value="${model.zoom}">
+									</input>
+									<div class="input-group-addon">
+										倍
+									</div>
+								</div>
+							</div>-->
+							<div class="form-group">
+								<label>走纸速度:</label>
+								<div class="input-group">
+									<select type="text" class="form-control" value="${model.paperspeed}"
+										   id="paperspeed"  name="paperspeed"  >
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+									<div class="input-group-addon">
+										cm/分钟
+									</div>
+								</div>
+										<!-- /.input group -->
+							</div>
+							<div class="form-group">
+								<label>横轴刻度:</label>
+								<div class="input-group">
+									<select class="form-control" value="${model.divisionX}"
+										   id="divisionX"  name="divisionX">
+										<option value="2">2</option>
+										<option value="4">4</option>
+										<option value="6">6</option>
+									</select>
+									<div class="input-group-addon">
+										格/分钟
+									</div>
+								</div>
+							</div>
+
+									<div class="form-group">
+										<label>纵轴刻度:</label>
+										<div class="input-group">
+
+											<select class="form-control" value="10"
+													id="divisionY"  name="divisionY" >
+												<option value="5">5</option>
+												<option value="10">10</option>
+											</select>
+											<div class="input-group-addon">
+												bpm/格
+											</div>
+										</div>
+										<!-- /.input group -->
+									</div>
+									</div>
+								</div>
+							</form>
+						</div>
+							<div class="col-sm-6">
+								<div class="box box-primary box-solid">
+									<div class="box-header with-border">
+										<h3 class="box-title">NST设置</h3>
+
+										<div class="box-tools pull-right">
+											<button class="btn btn-success btn-box-tool" style="width: 100px;font-size: 14px;"  id="addNst" ><i class="fa fa-plus" style="color:#fff;font-size: 18px;margin-right: 10px;"></i>添加NST</button>
+										</div>
+									</div><!-- /.box-header -->
+									<div class="box-body">
+										<ul class="nav nav-pills nav-stacked" id="nstlist">
+											<!--#for(nst:model.nstOptionlist)-->
+											<li class="active">${nst.nstOptionName}:${nst.nstOptionDetail}<!--#if(nst.level=='0')-->【无】
+												<!--#else(nst.level=='1')-->【低】<!--#else(nst.level=='2')-->【中】<!--#else(nst.level=='3')-->【高】<!--#end-->
+												<button id="${nst.id}" class="pull-right fa fa-trash-o nstOptiondel"></button></li>
+											<!--#end-->
+										</ul>
+									</div><!-- /.box-body -->
+								</div>
+								</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+						<div class="box box-primary box-solid">
+							<div class="box-header with-border">
+								<h3 class="box-title">显隐设置</h3>
+							</div><!-- /.box-header -->
+							<div class="box-body">
+								<div class="row">
+								<div class="col-sm-6">
+								<div class="form-group">
+									<label>打印页设置:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="radio1" class="regular-radio" value="true" name="reportPrintView"/><label for="radio1"></label>显示
+										<input type="radio" id="radio2" class="regular-radio" value="false" name="reportPrintView"/><label for="radio2"></label>隐藏
+									</div>
+								</div>
+								<div class="form-group">
+									<label>打印页NST显隐:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="radio3" class="regular-radio" value="true" name="reportPrintNstView"/><label for="radio3"></label>显示
+										<input type="radio" id="radio4" class="regular-radio" value="false" name="reportPrintNstView"/><label for="radio4"></label>隐藏
+									</div>
+								</div>
+								<div class="form-group">
+									<label>打印页CAT显隐:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="radio5" class="regular-radio" value="true" name="reportPrintCatView"/><label for="radio5"></label>显示
+										<input type="radio" id="radio6" class="regular-radio" value="false" name="reportPrintCatView"/><label for="radio6"></label>隐藏
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-6 active">
+								<div class="form-group">
+									<label>签发页设置:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="qianfa1" class="regular-radio" value="true" name="signpageView"/><label for="qianfa1"></label>显示
+										<input type="radio" id="qianfa2" class="regular-radio" value="false" name="signpageView"/><label for="qianfa2"></label>隐藏
+									</div>
+								</div>
+								<div class="form-group">
+									<label>签发页NST显隐:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="qianfa3" class="regular-radio" value="true" name="signpageNstView"/><label for="qianfa3"></label>显示
+										<input type="radio" id="qianfa4" class="regular-radio" value="false" name="signpageNstView"/><label for="qianfa4"></label>隐藏
+									</div>
+								</div>
+								<div class="form-group">
+									<label>签发页CAT显隐:</label>
+									<div class="input-group">
+										数据显隐
+										<input type="radio" id="qianfa5" class="regular-radio" value="true" name="signpageCatView"/><label for="qianfa5"></label>显示
+										<input type="radio" id="qianfa6" class="regular-radio" value="false" name="signpageCatView"/><label for="qianfa6"></label>隐藏
+									</div>
+								</div>
+							</div>
+						</div>
+							</div></div>
+						</div>
+
+							<div class="col-sm-6">
+							<div class="box box-primary box-solid">
+								<div class="box-header with-border">
+									<h3 class="box-title">CAT设置</h3>
+								<div class="box-tools pull-right">
+									<button class="btn btn-success btn-box-tool" style="width: 100px;font-size: 14px;"  id="addCat" ><i class="fa fa-plus" style="color:#fff;font-size: 18px;margin-right: 10px;"></i>添加CAT</button>
+								</div>
+								</div><!-- /.box-header -->
+								<div class="box-body">
+									<ul class="nav nav-pills nav-stacked" id="catlist">
+										<!--#for(cat:model.catOptionlist)-->
+										<li class="active">${cat.catOptionName}:${cat.catOptionDetail}<!--#if(cat.level=='0')-->【无】
+											<!--#else(cat.level=='1')-->【低】<!--#else(cat.level=='2')-->【中】<!--#else(cat.level=='3')-->【高】<!--#end-->
+											<button id="${cat.id}" class="pull-right fa fa-trash-o catOptiondel"></button></li>
+										<!--#end-->
+									</ul>
+									</div>
+								</div>
+							</div>
+							</div>
+					</div>
+					</div>
+				</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="js/index.min.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			var page=$(".reportSetting");
+			var divisionX="${model.divisionX}";
+			var divisionY="${model.divisionY}";
+			var paperspeed= "${model.paperspeed}"
+			$("#divisionX").val(divisionX);
+			$("#divisionY").val(divisionY);
+			$("#paperspeed").val(paperspeed);
+			var reportPrintView1 ='$!{model.reportPrintView}';
+			if(reportPrintView1=='true'){
+				$("input[name=reportPrintView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=reportPrintView][value=false]").attr("checked",true);
+			}
+			var reportPrintNstView1 ='$!{model.reportPrintNstView}';
+			if(reportPrintNstView1=='true'){
+				$("input[name=reportPrintNstView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=reportPrintNstView][value=false]").attr("checked",true);
+			}
+			var reportPrintCatView1 ='$!{model.reportPrintCatView}';
+			if(reportPrintCatView1=='true'){
+				$("input[name=reportPrintCatView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=reportPrintCatView][value=false]").attr("checked",true);
+			}
+
+			var signpageView ='$!{model.signpageView}';
+			if(signpageView=='true'){
+				$("input[name=signpageView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=signpageView][value=false]").attr("checked",true);
+			}
+			var signpageNstView ='$!{model.signpageNstView}';
+			if(signpageNstView=='true'){
+				$("input[name=signpageNstView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=signpageNstView][value=false]").attr("checked",true);
+			}
+			var signpageCatView ='$!{model.signpageCatView}';
+			if(signpageCatView=='true'){
+				$("input[name=signpageCatView][value=true]").attr("checked",true);
+			}else{
+				$("input[name=signpageCatView][value=false]").attr("checked",true);
+			}
+			page.find("#addCat").bind("click",function(){
+					page.find("#catlist").append("<li><span><input type='text' id='catOptionName' placeholder='CAT名称'></span><span><input type='text' id='catOptionDetail' placeholder='描述'></span>" +
+							"<span><select id='catLevel' ><option value='0'>无</option>" +
+							"<option value='1'>低</option>" +
+							"<option value='2'>中</option>" +
+							"<option value='3'>高</option>" +
+							"</select></span>" +
+							"<span><button class='btn btn-sm btn-primary btnaddCat' id='btnaddCat'>添加</button></span></li>");
+					page.find("#addCat").unbind("click");
+					page.find("#btnaddCat").bind("click",function(){
+						var params={
+							catOptionName:$("#catOptionName").val(),
+							catOptionDetail:$("#catOptionDetail").val(),
+							level:$("#catLevel").val()
+						};
+						$.ajax({
+							url : "setting/addCat.do",
+							data : params,
+							type : 'post',
+							dataType : "json ",
+							cache : false,
+							error : function(textStatus, errorThrown) {
+							},
+							success : function(data) {
+								if(data.status==0){
+									index.loadContent('setting/reportSettingList.do');
+								}
+							}
+						});
+					});
+			});
+			page.find("#addNst").bind("click",function(){
+					page.find("#nstlist").append("<li><span><input type='text' id='nstOptionName' placeholder='NST名称'></span><span><input type='text' id='nstOptionDetail' placeholder='描述'></span>" +
+							"<span><select id='nstLevel'><option value='0'>无</option>" +
+							"<option value='1'>低</option>" +
+							"<option value='2'>中</option>" +
+							"<option value='3'>高</option>" +
+							"</select></span>" +
+							"<span><button id='btnaddNst' class='btn btn-sm btn-primary'>添加</button></span></li>");
+					page.find("#addNst").unbind("click");
+					page.find("#btnaddNst").bind("click",function(){
+					var params={
+						nstOptionName:$("#nstOptionName").val(),
+						nstOptionDetail:$("#nstOptionDetail").val(),
+						level:$("#nstLevel").val()
+
+					};
+					$.ajax({
+						url : "setting/addNst.do",
+						data : params,
+						type : 'post',
+						dataType : "json ",
+						cache : false,
+						error : function(textStatus, errorThrown) {
+						},
+						success : function(data) {
+							if(data.status==0){
+								index.loadContent('setting/reportSettingList.do');
+							}
+						}
+					});
+				});
+
+			});
+			page.find(".nstOptiondel").click(function(e){
+				var id=$(e.target).attr("id");
+				$.ajax({
+					url : "setting/delNst.do",
+					data : {'id':id},
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							index.loadContent('setting/reportSettingList.do');
+						}
+					}
+				});
+			});
+			page.find(".catOptiondel").click(function(e){
+				var id=$(e.target).attr("id");
+				$.ajax({
+					url : "setting/delCat.do",
+					data : {'id':id},
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							index.loadContent('setting/reportSettingList.do');
+						}
+					}
+				});
+			});
+			$("#paperspeed").change(function(){
+				settingChange();
+			});
+			$("#divisionX").change(function(){
+				settingChange();
+			});
+			$("#divisionY").change(function(){
+				settingChange();
+			});
+			$("#zoom").change(function(){
+				settingChange();
+			});
+		var settingChange = function(){
+			var params={
+			  	id:"$!{model.id}",
+				paperspeed:$("#paperspeed").val(),
+				divisionX:$("#divisionX").val(),
+				divisionY:$("#divisionY").val(),
+				zoom:$("#zoom").val()
+			};
+			$.ajax({
+				url : "setting/updateSetParams.do",
+				data :params,
+				type : 'post',
+				dataType : "json ",
+				cache : false,
+				error : function(textStatus, errorThrown) {
+				},
+				success : function(data) {
+					if(data.status==0){
+						$.alert("参数设置保存成功");
+					}
+				}
+			});
+		}
+			$("input[name=signpageView]").change(function(){
+				SignShowHideChange();
+			});
+			$("input[name=signpageCatView]").change(function(){
+				SignShowHideChange();
+			});
+			$("input[name=signpageNstView]").change(function(){
+				SignShowHideChange();
+			});
+			var SignShowHideChange = function(){
+				var params={
+					id:"$!{model.id}",
+					signpageView:$("input[name=signpageView]:checked").val(),
+					signpageNstView:$("input[name=signpageNstView]:checked").val(),
+					signpageCatView:$("input[name=signpageCatView]:checked").val()
+				};
+				$.ajax({
+					url : "setting/updateSignShowHide.do",
+					data :params,
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							$.alert("显隐设置保存成功");
+						}
+					}
+				});
+			}
+
+
+			$("input[name=reportPrintView]").change(function(){
+				ShowHideChange();
+			});
+			$("input[name=reportPrintNstView]").change(function(){
+				ShowHideChange();
+			});
+			$("input[name=reportPrintCatView]").change(function(){
+				ShowHideChange();
+			});
+			var ShowHideChange = function(){
+				var params={
+					id:"$!{model.id}",
+					reportPrintView:$("input[name=reportPrintView]:checked").val(),
+					reportPrintNstView:$("input[name=reportPrintNstView]:checked").val(),
+					reportPrintCatView:$("input[name=reportPrintCatView]:checked").val()
+				};
+				$.ajax({
+					url : "setting/updateshowhide.do",
+					data :params,
+					type : 'post',
+					dataType : "json ",
+					cache : false,
+					error : function(textStatus, errorThrown) {
+					},
+					success : function(data) {
+						if(data.status==0){
+							$.alert("显隐设置保存成功");
+						}
+					}
+				});
+			}
+
+
+
+		})(jQuery);
+	</script>
+</body>
+</html>

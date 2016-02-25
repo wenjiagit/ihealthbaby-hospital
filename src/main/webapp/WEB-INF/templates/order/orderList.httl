@@ -1,0 +1,220 @@
+<!--#set(OrderModel model) -->
+<!--#set(PageResult page)-->
+<!--#set(OrderQueryForm form)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('orderManage.orderList')} <small>订单列表</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content orderList">
+			<div class="box box-primary">
+				<div class="box-header with-border" style="margin-left: -12px">
+					<div id="search_div">
+						<form id="searchForm" action="/order/orderList.do" method="get">
+						<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn">
+									<span class="btn btn-default">订<span style="padding-left: 6px;">单</span><span style="padding-left: 6px;">号</span></span>
+								</div>
+								<input class="form-control search_input" type="text"  name="orderId" value="${form.orderId}" >
+							</div>
+						</div>
+						<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn">
+									<span  class="btn btn-default">孕妇姓名</span>
+								</div>
+								<input class="form-control search_input" type="text" name="userName" value="${form.userName}" >
+							</div>
+						</div>
+						<!--#if(perm('orderManage.orderList'))-->
+						<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn">
+									<span  class="btn btn-default">医院名称</span>
+								</div>
+								<input class="form-control search_input" type="text" name="hospitalName" value="${form.hospitalName}" >
+							</div>
+						</div>
+						<!--#end-->
+						<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn ">
+									<span class="btn btn-default">订单状态</span>
+								</div>
+								<select class="form-control search_input" type="text" name="orderStatus">
+									<option value="-1" #if(form.orderStatus=="-1") selected #end>不限</option>
+									<option value="0" #if(form.orderStatus=="0") selected #end>未支付</option>
+									<option value="1" #if(form.orderStatus=="1") selected #end>待发货</option>
+									<option value="2" #if(form.orderStatus=="2") selected #end>待收货</option>
+									<option value="3" #if(form.orderStatus=="3") selected #end>订单结束</option>
+									<option value="4" #if(form.orderStatus=="4") selected #end>订单取消</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn ">
+									<span  class="btn btn-default">订单类型</span>
+								</div>
+								<select class="form-control search_input" type="text" name="orderType">
+									<option value="-1" #if(form.orderType=="-1") selected #end>不限</option>
+									<option value="0" #if(form.orderType=="0") selected #end>APP服务订单</option>
+									<option value="1" #if(form.orderType=="1") selected #end>WEB服务订单</option>
+									<option value="2" #if(form.orderType=="2") selected #end>APP商品订单</option>
+									<option value="3" #if(form.orderType=="3") selected #end>WEB商品订单</option>
+								</select>
+							</div>
+						</div>
+						<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn ">
+									<span class="btn btn-default">配送类型</span>
+								</div>
+								<select class="form-control search_input" type="text" name="deliverType">
+									<option value="-1" #if(form.deliverType=="-1") selected #end>不限</option>
+									<option value="0" #if(form.deliverType=="0") selected #end>到院自取</option>
+									<option value="1" #if(form.deliverType=="1") selected #end>邮寄</option>
+								</select>
+							</div>
+						</div>
+				<!--		<div  class="col-lg-3 col-sm-4 col-xs-6">
+							<div class="input-group input-group-sm">
+								<div class="input-group-btn ">
+									<span class="btn btn-default">支付类型</span>
+								</div>
+								<select class="form-control search_input" type="text" name="payType">
+									<option value="-1" #if(form.payType=="-1") selected #end>不限</option>
+									<option value="0" #if(form.payType=="0") selected #end>现金支付</option>
+									<option value="1" #if(form.payType=="1") selected #end>支付宝</option>
+									<option value="2" #if(form.payType=="2") selected #end>微信</option>
+									<option value="3" #if(form.payType=="3") selected #end>银联</option>
+								</select>
+							</div>
+						</div>-->
+						<div  class="col-lg-3 col-sm-4 col-xs-2">
+							<input type="hidden" name="page" value="1">
+							<input type="hidden" name="pageSize" value="${form.pageSize}">
+							<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+							<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+						</div>
+						</form>
+					</div>
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll"class="th_checkbox_btn" /><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty" style="padding-left: 20px">订单号</th>
+									<th class="table_th_sty">医院</th>
+									<th class="table_th_sty">孕妇姓名</th>
+									<th class="table_th_sty">服务单号</th>
+									<th class="table_th_sty">订单类型</th>
+									<th class="table_th_sty">订单金额</th>
+									<th class="table_th_sty">运费</th>
+									<th class="table_th_sty">订单总金额</th>
+									<th class="table_th_sty">创建时间</th>
+									<th class="table_th_sty">配送类型</th>
+									<th class="table_th_sty">订单状态</th>
+									<th class="table_th_sty">详情</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(model : page.value)  -->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"
+										value="${model.id}" /></td>-->
+									<td style="padding-left: 20px">${model.id}</td>
+									<td>${model.hospitalDO.name}</td>
+									<td>${model.userDO.name}</td>
+									<td>${NumberFormat(model.serviceDO.serviceNumber)}</td>
+									<!--#if(model.orderType==0 || model.orderType==2)-->
+									<td>APP订单</td>
+									<!--#else-->
+									<td>WEB订单</td>
+									<!--#end-->
+									<td>${getAccountantMoney(model.orderFee)}</td>
+									<td>${getAccountantMoney(model.deliverFee)}</td>
+									<td>${getAccountantMoney(model.totalFee)}</td>
+									<td>${model.createTime.format("MM-dd HH:mm")}</td>
+									<!--#if(model.deliverType==0)-->
+									<td>到院自提</td>
+									<!--#else-->
+									<td>邮寄</td>
+									<!--#end-->
+									<!--#if(model.orderStatus==0)-->
+									<td>未支付</td>
+									<td><button class="btn btn-sm btn-primary orderdetail" id="${model.id}">付款</button></td>
+									<!--#else(model.orderStatus==1)-->
+									<td>待发货</td>
+									<td><button class="btn btn-sm btn-primary orderdetail" id="${model.id}">发货</button></td>
+									<!--#else(model.orderStatus==2)-->
+									<td>待收货</td>
+									<td><button class="btn btn-sm btn-primary orderdetail" id="${model.id}">详情</button></td>
+									<!--#else(model.orderStatus==3)-->
+									<td>订单结束</td>
+									<td><button class="btn btn-sm btn-primary orderdetail" id="${model.id}">详情</button></td>
+									<!--#else(model.orderStatus==4)-->
+									<td>订单取消</td>
+									<td><button class="btn btn-sm btn-primary orderdetail" id="${model.id}">详情</button></td>
+									<!--#end-->
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+					$!{page(page,"index.loadContent('/order/orderList.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+		(function ($) {
+			'use strict';
+			var page = $(".orderList");
+
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+			page.find("#refresh").click(function(){
+				index.loadContent("order/orderList.do");
+			});
+			page.find(".orderdetail").click(function(e){
+				var id = $(e.target).attr("id");
+				index.loadContent("order/"+id+"/orderDetail.do");
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("order/orderList.do?"+form.serialize());
+				return false;
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>

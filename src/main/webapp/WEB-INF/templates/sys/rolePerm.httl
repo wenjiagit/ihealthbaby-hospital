@@ -1,0 +1,52 @@
+<!-- #set(List<SysPermissionDO> allPerm) -->
+<!-- #set(List<SysPermissionDO> list) -->
+<!--#set(SysPermissionDO sysPermission)-->
+<!--#set(BindingResult bindingResult)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	${include('/commons/foot.httl')}
+	<body>
+<div class="content-wrapper-inner">
+	<div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Condensed Full Width Table</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body no-padding">
+                  <table class="table table-condensed">
+                    <tr>
+                      <th><input type="checkbox" />全选</th>
+                      <th style="width: 10px">编号</th>
+                      <th>权限名</th>
+                      <th>类型</th>
+                    </tr>
+                    <!--#for(sysPermission : allPerm)  -->
+                    <tr>
+                      <td><input type="checkbox" /></td>
+                      <td>${for.index}</td>
+                      <td>${sysPermission.permissionName}</td>
+                      <td>${sysPermission.permissionType}</td>
+                    </tr>
+                    <!-- #end -->
+                  </table>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+	</div>
+<script>
+(function ($) {
+    'use strict';
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' // optional
+    });
+<!--#if(bindingResult)-->
+    $("#userForm").vaild($!{validJson(bindingResult)});
+<!--#end-->
+})(jQuery);
+</script>
+</body>
+</html>

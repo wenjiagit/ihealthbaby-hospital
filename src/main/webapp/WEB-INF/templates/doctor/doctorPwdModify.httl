@@ -1,0 +1,81 @@
+<!--#set(Long id)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="col-md-6">
+		<div class="box box-danger ">
+			<div class="box-header">
+				<h3 class="box-title">重置密码</h3>
+			</div>
+			<div  class="box-body">
+					<div class="form-group">
+						<label>新密码:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input type="password" class="form-control" name="password" id="password">
+							</div>
+						</div>
+
+					<div class="form-group">
+						<label>确认新密码:</label>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input type="password" class="form-control" name="repassword" id="repassword">
+						</div>
+					</div>
+					<div class="dialog-footer-buttons">
+						<button type="button" class="btn btn-primary" id="modifyPassword">确认修改</button>
+					</div>
+			</div>
+		</div>
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+	<script src="js/alone-form.min.js"></script>
+<script>
+(function ($) {
+    'use strict';
+	$("#modifyPassword").click(function(){
+		var password = $("#password").val();
+		var repassword = $("#repassword").val();
+		if(password==""){
+			$.alert("请输入密码");
+			return false;
+		}
+		if(password.length>20||password.length<6){
+			$.alert("密码长度建议在6-20个字符间");
+			return false;
+		}
+		if(password!=repassword){
+			$.alert("两次密码输入不一致");
+			return false;
+		}
+		$.ajax({
+			url : "staffManage/docPassword.do",
+			data : {password:password,id:${id}},
+			type : 'post',
+			dataType : "json",
+			cache : false,
+			error : function(textStatus, errorThrown) {
+			},
+			success : function(data) {
+				if(data.status==0){
+					$.alert("修改成功");
+				}
+			}
+		});
+	});
+})(jQuery);
+</script>
+</body>
+</html>

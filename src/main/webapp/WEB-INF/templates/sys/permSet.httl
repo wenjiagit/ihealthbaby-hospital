@@ -1,0 +1,134 @@
+<!-- #set(Long id) -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    ${include('/commons/head.httl',['name':m('module.index')])}
+    <link href="lib/silviomoreto-bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="dialog-content" id="tree">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <form name="RPform" action="sys/addRolePerm.do" method="post">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">权限配置</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div id="allPerm">
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input type="hidden" name="roleId" value="${id}">
+                            <div class="dialog-footer-buttons">
+                                <button type="submit" class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+${include('/commons/foot.httl')}
+<script src="lib/silviomoreto-bootstrap-select/js/bootstrap-select.min.js"></script>
+<script>
+    (function ($) {
+        "use strict";
+        jQuery.ajax({
+            'type': 'POST',
+            'url': "sys/${id}/permSet.do",
+            'contentType': 'application/json',
+            'data': null,
+            'dataType': 'json',
+            'success': function (data) {
+                console.log(data);
+                var rolePerm = data.permlist;
+                var allPerm = data.allPerm;
+                var showlist2 = $("<ul id='allT'></ul>");
+                showall(allPerm[0].childNode, showlist2, 'allT');
+                $("#allPerm").append(showlist2);
+                $('#allT').checktree();
+                console.log(rolePerm.length);
+                for (var m = 0; m < rolePerm.length; m++) {
+                    $("#AT" + rolePerm[m] + "").attr("checked", 'checed');
+                }
+                $('li:has(ul)').click(function (event) {
+                    if (this == event.target) {
+                        if ($(this).hasClass("tree-close")) {
+                            $(this).addClass("tree-open").removeClass("tree-close");
+                            $(this).addClass("tree-img-open").removeClass("tree-img-close");
+                        } else {
+                            $(this).addClass("tree-close").removeClass("tree-open");
+                            $(this).addClass("tree-img-close").removeClass("tree-img-open");
+                        }
+                    }
+                })
+            }
+        })
+        //menu_list为json数据
+        //parent为要组合成html的容器
+        function showall(childNode, parent) {
+            for (var menu in childNode) {
+                 var remarks=childNode[menu].remarks;
+                if(remarks!=null&&remarks!=''){
+                    remarks = "【"+remarks+"】";
+
+                }else{
+                    remarks="";
+                }
+                //如果有子节点，则遍历该子节点
+                var li = $("<li></li>");
+                $(li).append("<input  type='checkbox' name='permIds' class='regular-checkbox' id='AT" + childNode[menu].id + "' value='" + childNode[menu].id + "' /><label style='margin-left:28px;margin-top:-19px' for='AT" + childNode[menu].id + "'></label>")
+                if (childNode[menu].childNode != null && childNode[menu].childNode.length > 0) {
+                    //创建一个子节点li
+                    //将li的文本设置好，并马上添加一个空白的ul子节点，并且将这个li添加到父亲节点中
+                    $(li).addClass("tree-close tree-img-close");
+                    $(li).append(childNode[menu].name+remarks).append("<ul></ul>").appendTo(parent);
+                    //将空白的ul作为下一个递归遍历的父亲节点传入
+                    showall(childNode[menu].childNode, $(li).children().eq(2));
+                }
+                //如果该节点没有子节点，则直接将该节点li以及文本创建好直接添加到父亲节点中
+                else {
+                    $(li).append(childNode[menu].name+remarks).appendTo(parent);
+                }
+            }
+        };
+        $.fn.extend({
+            checktree: function () {
+                console.log($(this));
+                $(this)
+                        .addClass('checktree-root')
+                        .on('change', 'input[type="checkbox"]', function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            checkParents($(this));
+                            checkChildren($(this));
+                        });
+                var checkParents = function (c) {
+                    var parentLi = c.parents('ul:eq(0)').parents('li:eq(0)');
+                    if (parentLi.length) {
+                        var siblingsChecked = parseInt($('input[type="checkbox"]:checked', c.parents('ul:eq(0)')).length),
+                                rootCheckbox = parentLi.find('input[type="checkbox"]:eq(0)');
+                        if (c.is(':checked'))
+                            rootCheckbox.prop('checked', true)
+                        else if (siblingsChecked === 0)
+                            rootCheckbox.prop('checked', false);
+                        checkParents(rootCheckbox);
+                    }
+                }
+                var checkChildren = function (c) {
+                    var childLi = $('ul li input[type="checkbox"]', c.parents('li:eq(0)'));
+
+                    if (childLi.length)
+                        childLi.prop('checked', c.is(':checked'));
+                }
+            }
+        });
+
+    })(jQuery);
+</script>
+</body>
+</html>

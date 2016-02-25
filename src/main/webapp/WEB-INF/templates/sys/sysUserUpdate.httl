@@ -1,0 +1,73 @@
+<!--#set(List<Long> usrRole)-->
+<!--#set(SysUserRoleDO urd)-->
+<!--#set(SysUserModel form)-->
+<!-- #set(List<SysRoleDO> rolelist) -->
+<!-- #set(SysRoleDO role) -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+<link href="lib/silviomoreto-bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="content-wrapper-inner">
+	<section class="content">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header">
+						<h3 class="box-title">$!{permName('permission.user.update')}</h3>
+					</div>
+					<div class="box-body">
+						<!-- Date dd/mm/yyyy -->
+						<form id="userForm" class="dialog-content" action="/sys/${form.id}/sysUserUpdate.do" method="post">
+
+							<div class="form-group">
+								<label>用户组:</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-fw fa-list" style="font-size: 19px;margin-top:1px"></i>
+									</div>
+									<select name="roleid" id="roleid"
+										class="selectpicker show-tick form-control" multiple
+										data-live-search="true" >
+										<!-- #for(role : rolelist) -->
+										<option value="${role.id}" >${role.roleName}</option>
+										<!-- #end -->
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group" style="height: 100px;">
+							</div>
+
+							<div class="dialog-footer-buttons">
+								<button type="submit" class="btn btn-primary">更新信息</button>
+							</div>
+						</form>
+
+					</div>
+				</div>
+				<!-- /.box -->
+				<!-- ./wrapper -->
+			</div>
+		
+		</div>
+	</section>
+	</div>
+	${include('/commons/foot.httl')}
+<script src="lib/silviomoreto-bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="js/alone-form.min.js"></script>
+	<script>
+(function ($) {
+    'use strict';
+	var rolelist=$!{usrRole};
+	for(var m in rolelist){
+		$("#roleid").find("option[value='"+rolelist[m]+"']").attr("selected",true);
+	}
+	$('.selectpicker').selectpicker();
+})(jQuery);
+    </script>
+</body>
+</html>

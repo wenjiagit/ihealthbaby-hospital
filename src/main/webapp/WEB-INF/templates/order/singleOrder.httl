@@ -1,0 +1,230 @@
+<!--#set(SingleOrderModel model)-->
+<!--#set(String init)-->
+<!--#set(ProductDO product)-->
+<!--#set(AddressDO address)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+			</h1>
+		</section>
+		<!-- Main content -->
+		<section class="content orderDetail" >
+			<div class="box box-primary">
+				<div class="box-header with-border col-xs-12" style="background-color: #fff">
+					<!--#if(init==1)-->
+					<div class="col-sm-6" style="padding: 0">
+						<div class="input-group">
+						 <span class="input-group-addon">手机号码</span>
+							<input class="form-control single_order" id="mobile">
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<a class="btn btn-primary" id="validUser">检测用户是否开通服务</a>
+						</div>
+                    <!--#else-->
+					<!--#if(model==null)-->
+					<div class="row">
+					<div class="col-sm-6">
+						<div class="input-group">
+							<span class="input-group-addon">手机号码</span>
+							<input class="form-control single_order" id="mobile">
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<a class="btn btn-primary" id="validUser">检测用户是否开通服务</a>
+					</div>
+					</div>
+					<div class="row">
+						<div class="callout callout-info lead" style="margin: 15px;padding: 10px">
+							<h4 style="margin-top:11px">尚未开通服务或服务已结束!</h4>
+
+							</div>
+						</div>
+					<!--#else-->
+					<form id="serviceForm" action="order/singleOrderDeal.do" method="post">
+					<div class="col-xs-12">
+						<div class="col-xs-4" style="font-size: 18px;margin-top:10px;">
+							用户名：${model.userDO.name}
+						</div>
+						<div class="col-xs-4" style="font-size: 18px;margin-top:10px;">
+							手机号：${model.userDO.mobile}
+						</div>
+						<div class="col-xs-4" style="font-size: 18px;margin-top:10px;">
+							服务单号：${model.serviceDO.id}
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="col-md-6 col-xs-6" style="margin-top: 18px;">
+						配送方式：<input type="radio" id="deliverTypeSend" name="deliverType" value="1" checked>邮寄<input type="radio" name="deliverType"  value="0" >到院自提
+
+						</div>
+					</div>
+					<div class="col-xs-12" id="divAddress" >
+						<!--#for(address : model.addressDOs)-->
+						<div class="col-md-4">
+							<div class="box box-solid box-success" id="box${address.id}" >
+								<div class="box-header">
+									<div class="box-tools pull-right">
+										<input class="btn btn-box-tool" type="radio" id="addressId${for.index}" name="addressId" value="${address.id}" checked/>
+									</div>
+									<label for="addressId${for.index}"><h3 class="box-title">地址${for.index+1}</h3></label>
+								</div><!-- /.box-header -->
+								<div class="box-body">
+									<div  style="margin-top: 15px;">
+										所在地区：${address.area}
+									</div>
+									<div  style="margin-top: 15px;">
+										详细地址：${address.address}
+									</div>
+									<div  style="margin-top: 15px;">
+										收货人：${address.linkMan}
+									</div>
+									<div  style="margin-top: 15px;">
+										联系电话：${address.mobile}
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--#end-->
+
+					</div>
+
+					<div class="col-md-12">
+						<table class="table table-hover">
+							<tr class="info">
+								<th>购买项</th>
+								<th>商品名</th>
+								<th>单价</th>
+								<th>所含数量</th>
+								<th>购买个数</th>
+							</tr>
+						<!--#for(product:model.productDOs)-->
+							<tr #if(product.productType==1) class="danger" #else class="success" #end><!--循环这个div-->
+								<td style="font-size: 18px;padding-left: 0;margin:5px 0 5px 0" class="col-md-2 col-xs-2 ">
+									<input type="checkbox" value="${product.id}"  name="orderitemlist[${for.index}].productId" ></td>
+									<input type="hidden" value="${product.productType}">
+								<td style="font-size: 18px;padding-left: 0;margin:5px 0 5px 0" class="col-md-2 col-xs-2 ">${product.name}</td>
+								<td style="font-size: 18px;padding-left: 0;margin:5px 0 5px 0" class="col-md-2 col-xs-2 ">${getAccountantMoney(product.price)}元</td>
+								<td style="font-size: 18px;padding-left: 0;margin:5px 0 5px 0" class="col-md-2 col-xs-2 "><!--#if(product.innerAmount=='-1')-->不限<!--#else-->${product.innerAmount}<!--#end--></td>
+								<td><input type="number" style="font-size: 18px;padding-left: 0;margin:5px 0 5px 0" class="col-md-2 col-xs-2 " id="Ccouplant" name="orderitemlist[${for.index}].amount" value="1" min="1" max="${product.maxAmount}"/>
+								</td>
+							</tr>
+						<!--#end-->
+						</table>
+					</div>
+							<div class="col-md-12">
+								<input type="hidden" name="userId" value="${model.userDO.id}">
+								<input type="hidden" name="serviceId" value="${model.serviceDO.id}">
+								<input type="hidden" name="hospitalId" value="${model.serviceDO.hospitalId}">
+								<button type="submit" class="btn btn-primary">确认购买</button>	<button type="button" id="addNewAdd" class="btn btn-primary pull-right">添加地址</button>
+							</div>
+
+					<!--#end-->
+					<!--#end-->
+					</form>
+
+					</div>
+
+					</div>
+
+		</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script>
+		(function ($) {
+			'use strict';
+			var page =$(".orderDetail");
+			$(".single_order").blur(function(){
+				var single_orderval=$(".single_order").val();
+				if(single_orderval!=''&&single_orderval!=null) {
+					if (!single_orderval.match(/^1[3458]\d{9}$/)) {
+						alert("手机号码格式不正确！请重新输入");
+						$(".single_order").val('').focus();
+					}
+				}
+			})
+			page.find("#validUser").click(function(){
+				var mobile =page.find("#mobile").val();
+				index.loadContent("order/singleOrder.do?mobile="+mobile);
+			});
+			page.find("input[name='deliverType']").change(function(){
+				changeDeliveryType();
+			});
+			var boxid=page.find("input[name='addressId']:checked").val();
+			page.find("input[name='addressId']").each(function(){
+				$("#box"+this.value).removeClass("box-warning").addClass("box-success");
+			})
+			$("#box"+boxid).removeClass("box-success").addClass("box-warning");
+			page.find("input[name='addressId']").change(function(){
+				var boxid=page.find("input[name='addressId']:checked").val();
+				page.find("input[name='addressId']").each(function(){
+							$("#box"+this.value).removeClass("box-warning").addClass("box-success");
+				})
+				$("#box"+boxid).removeClass("box-success").addClass("box-warning");
+			});
+			var changeDeliveryType=function(){
+				if($("input[name='deliverType']:checked").val()==0){
+					page.find("#divAddress").hide();
+				}else{
+					page.find("#divAddress").show();
+				}
+			}
+			page.find("#addNewAdd").click(function(){
+				index.loadDialog({url: "order/addNewAddress.do?userId=${model.userDO.id}",target:"order/singleOrder.do?mobile=${model.userDO.mobile}",title:'添加地址'});
+			});
+			$("#serviceForm").submit(function(){
+				var form = $("#serviceForm");
+				var flag=false;
+				$("input[name^=orderitemlist][type=checkbox]").each(function(){ //遍历table里的全部checkbox
+					console.log($(this).prop("checked"));
+					if($(this).prop("checked")){
+						flag= true;
+					}
+				});
+				if(flag==false){
+					$.alert("请选择至少一件商品");
+					return false;
+				}
+				form.startLoading();
+					$.ajax({
+						cache: false,
+						dataType: "json",
+						type: form.attr("method"),
+						url: form.attr("action"),
+						data: form.serialize(),
+						error: function(request) {
+							form.stopLoading();
+							$.alert(request);
+						},
+						success: function(data) {
+							form.stopLoading();
+							if(data.status == 1){
+								form.vaild(data.msgMap);
+							} else if(data.status == 0){
+								if(data.msg==null){
+									index.loadContent("/order/"+data.data+"/orderDetail.do")
+								}if(data.msg!=null){
+									$.alert(data.msg);
+								}
+							} else{
+								$.alert(data.msg);
+							}
+						}
+					});
+				return false;
+			});
+		})(jQuery);
+
+	</script>
+</body>
+</html>

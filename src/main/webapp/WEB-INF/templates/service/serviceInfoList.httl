@@ -1,0 +1,214 @@
+<!--#set(ServiceModel model) -->
+<!--#set(PageResult page)-->
+<!--#set(ServiceQueryForm form)-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+${include('/commons/head.httl',['name':m('module.index')])}
+</head>
+<body>
+	<div class="content-wrapper-inner sysUserList">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				$!{permName('outsideService.serviceList')} <small>监护列表</small>
+			</h1>
+		</section>
+
+		<!-- Main content -->
+		<section class="content serviceList">
+			<div class="box box-primary">
+				<div class="box-header with-border" style="margin-left: -12px">
+						<form id="searchForm" action="/service/ServiceList.do" method="get">
+							<div id="search_div">
+								<div class="col-md-3 col-sm-4 col-xs-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span  class="btn btn-default">服务状态</span>
+										</div>
+										<select class="form-control search_input" type="text" name="serviceStatus">
+											<option value="-1" #if(form.serviceStatus=='-1') selected #end >不限</option>
+											<option value="0" #if(form.serviceStatus=='0') selected #end >开通未绑定设备</option>
+											<option value="1" #if(form.serviceStatus=='1') selected #end >绑定未激活服务</option>
+											<option value="2" #if(form.serviceStatus=='2') selected #end >服务已激活</option>
+											<option value="3" #if(form.serviceStatus=='3') selected #end >服务结束</option>
+											<option value="4" #if(form.serviceStatus=='4') selected #end >服务已取消</option>
+											<option value="5" #if(form.serviceStatus=='5') selected #end >申请退款中</option>
+											<option value="6" #if(form.serviceStatus=='6') selected #end >已退款</option>
+											<option value="7" #if(form.serviceStatus=='7') selected #end >退款申请被驳回</option>
+										</select>
+									</div>
+								</div>
+								<!--#if(perm('outsideService.serviceList'))-->
+								<div  class="col-md-3 col-sm-4 col-xs-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn">
+											<span class="btn btn-default">所属医院</span>
+										</div>
+										<input class="form-control search_input" type="text"  name="hospitalName" value="${form.hospitalName}" >
+									</div>
+								</div>
+								<!--#end-->
+								<div  class="col-md-3 col-sm-4 col-xs-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn">
+											<span  class="btn btn-default">孕妇姓名</span>
+										</div>
+										<input class="form-control search_input" type="text" name="username" value="${form.username}" >
+									</div>
+								</div>
+								<div  class="col-md-3 col-sm-4 col-xs-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span class="btn btn-default">探头 S&nbsp;&nbsp;N</span>
+										</div>
+										<input class="form-control search_input" type="text" name="serialnum" value="${form.serialnum}">
+									</div>
+								</div>
+								<div  class="col-md-3 col-sm-4 col-xs-6">
+									<div class="input-group input-group-sm">
+										<div class="input-group-btn ">
+											<span class="btn btn-default">服务单号</span>
+										</div>
+										<input class="form-control search_input" type="text"  name="serviceId" value="${form.serviceId}" >
+									</div>
+								</div>
+								<div  class="col-md-3 col-sm-4 col-xs-6">
+									<input type="hidden" name="page" value="1">
+									<input type="hidden" name="pageSize" value="${page.pageSize}">
+									<button type="button" id="searchFormSub" class="btn btn-success btn-sm">查询</button>
+									<button type="button" id="refresh" class="btn btn-success btn-sm">显示全部</button>
+								</div>
+							</div>
+						</form>
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<div class="box_margin">
+				<div class="box-body no-padding">
+					<div class="table-responsive mailbox-messages">
+						<table class="table table-hover table-striped table_height">
+							<thead>
+								<tr class="info">
+									<!--<th><input type="checkbox" id="checkAll" class="th_checkbox_btn" /><span style="padding-left: 10px">全选</span></th>-->
+									<th class="table_th_sty" style="padding-left: 20px">监护服务单号</th>
+									<th class="table_th_sty" style="padding-left: 20px">孕妇姓名</th>
+									<th class="table_th_sty">所属医院</th>
+									<th class="table_th_sty">负责医生</th>
+									<th class="table_th_sty">服务状态</th>
+									<th class="table_th_sty">探头SN</th>
+									<th class="table_th_sty">开始时间</th>
+									<th class="table_th_sty">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- #for(model : page.value)  -->
+								<tr>
+									<!--<td><input class="select-row-checkbox td_checkbox_btn" type="checkbox" name="subBox"-->
+										<!--value="${model.id}" /></td>-->
+									<td style="padding-left: 20px">${NumberFormat(model.serviceNumber)}</td>
+									<td style="padding-left: 20px">${model.userDO.name}</td>
+									<td>${model.hospitalDO.name}</td>
+									<td>${model.sysUserDO.name}</td>
+									<!--#if(model.serviceStatus == 0)-->
+									<td>开通未绑定设备</td>
+									<!--#else(model.serviceStatus == 1)-->
+									<td>绑定未激活服务</td>
+									<!--#else(model.serviceStatus == 2)-->
+									<td>服务已激活</td>
+									<!--#else(model.serviceStatus == 3)-->
+									<td>服务结束</td>
+									<!--#else(model.serviceStatus == 4)-->
+									<td>服务已取消</td>
+									<!--#else(model.serviceStatus == 5)-->
+									<td>申请退款中</td>
+									<!--#else(model.serviceStatus == 6)-->
+									<td>已退款</td>
+									<!--#else(model.serviceStatus == 7)-->
+									<td>
+										<a id="element" tabindex="0" role="button" data-toggle="popover"
+										   data-trigger="focus" data-placement="bottom">
+											退款申请被驳回
+										</a>
+										<h1 id="popover-title" class="hide">退款详情</h1>
+										<div id="popover-content" class="hide">
+											<h5 style="color: #999;margin-top: -1px;">申请理由</h5>
+											<div style="font-size: 15px;">${model.refundDO.applyReason}</div>
+											<h5 style="color: #999;">驳回理由</h5>
+											<div  style="font-size: 15px">${model.refundDO.rejectReason}</div>
+										</div>
+									</td>
+									<!--#end-->
+									<td>${model.serialnum}</td>
+									<td>${model.beginTime.format("MM-dd HH:mm")}</td>
+									<td><button class="btn btn-sm btn-primary servicebalance" id="${model.id}">详情</button></td>
+								</tr>
+								<!-- #end -->
+							</tbody>
+						</table>
+						<!-- /.table -->
+					</div>
+					<!-- /.mail-box-messages -->
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer clearfix">
+
+					$!{page(page,"index.loadContent('/service/ServiceList.do?page={page}&amp;pageSize={pageSize}&amp;" + form.toUrl() +"')")}
+				</div>
+			</div>
+	<!-- /. box -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- ./wrapper -->
+	${include('/commons/foot.httl')}
+	<script src="lib/AdminLTE/js/app.min.js" type="text/javascript"></script>
+	<script src="js/main.min.js" type="text/javascript"></script>
+	<script src="build/js/index.js" type="text/javascript"></script>
+	<script>
+		(function ($) {
+			'use strict';
+			$('#element').mouseover(function(){
+				$(this).popover("show");
+			})
+			$('#element').mouseout(function(){
+				$(this).popover("hide");
+			})
+			$(document).ready(function () {
+				//自定义popover显示的内容
+				$('#element').popover({
+					html : true,
+					content: function() {
+						return $("#popover-content").html();
+					},
+					title: function(){
+						return $("#popover-title").html();
+					}
+				});
+
+			});
+
+			var page = $(".serviceList")
+			page.find("table").baseTable();
+
+			page.find("#checkAll").click(function() {
+				page.find(".select-row-checkbox").prop("checked", this.checked).change();
+			});
+
+			page.find("#refresh").click(function(){
+				index.loadContent("service/ServiceList.do");
+			});
+			page.find(".servicebalance").click(function(e){
+				var id =$(e.target).attr("id");
+				index.loadContent("service/balanceDetail.do?id="+id);
+			});
+			page.find("#searchFormSub").click(function(){
+				var form = $("#searchForm");
+				index.loadContent("service/ServiceList.do?"+form.serialize());
+				return false;
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>
